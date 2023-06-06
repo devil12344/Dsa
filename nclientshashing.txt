@@ -1,147 +1,116 @@
-#include<iostream>
-    #include<cstdlib>
-    #include<string>
-    #include<cstdio>
-    using namespace std;
-    const int TABLE_SIZE = 20;
+max=int(input("Enter hast table size: "))
+ht = [-1]*max
+ht1 = [-1]*max
+print(ht)
+keys=[]
+def LinearProbe(k):
+    pos=k%max
+    if(ht[pos]==-1):
+        ht[pos]=k
+    else:
+        while(ht[pos]!=-1):
+            pos=(pos+1)%max
+        ht[pos]=k
+def QuadraticProbe(k):
+    pos=k%max
+    if(ht1[pos]==-1):
+        ht1[pos]=k
+    else:
+        i=1
+        while True:
+            newpos=(pos+(i*i))%max
+            if(ht1[newpos]==-1):
+                ht1[newpos]=k
+                break
+            i=i+1
+def insert():
+    print("\tPerforming Linear Probing: ")
+    print("\nEnter the keys below: ")
+    ans=1
+    cnt=1
+    while(ans==1):
+        key=int(input("Enter key: "))
+        keys.append(key)
+        LinearProbe(key)
+        print(ht)
+        cnt=cnt+1
+        if(cnt>max):
+            print("Hash table is full!")
+            print(ht)
+            break
+        ans=int(input("Enter more?(1/0) "))
+    print("\tPerforming Quadratic Probing on same key set: ")
+    print("keys: ", keys)
+    for i in keys:
+        QuadraticProbe(i)
+        print(ht1)
 
-    class HashEntry
-    {
-        public:
-            int key;
-            int value;
-            HashEntry(int key, int value)//parameteized constructor
-            {
-                this->key = key;
-                this->value = value;
-            }
-    };//end of class
-
-    class HashMap
-
-    {
-        private:
-            HashEntry **table;
-        public:
-            HashMap()
-     {
-                table = new HashEntry * [TABLE_SIZE];
-                for (int i = 0; i< TABLE_SIZE; i++)
-                {
-                    table[i] = NULL;
-                }
-            }
-            int HashFunc(int key)//division hash function
-            {
-                return key % TABLE_SIZE;
-            }
-     void Insert(int key, int value)//insert operation
-     {
-                int hash = HashFunc(key);
-                while (table[hash] != NULL && table[hash]->key != key)
-                {
-                    hash = HashFunc(hash + 1);
-                }
-                if (table[hash] != NULL)
-
-                    delete table[hash];
-                table[hash] = new HashEntry(key, value);
-     }
-            int Search(int key)//search operation
-     {
-         int  hash = HashFunc(key);
-         while (table[hash] != NULL && table[hash]->key != key)
-         {
-             hash = HashFunc(hash + 1);
-         }
-         if (table[hash] == NULL)
-             return -1;
-         else
-             return table[hash]->value;
-            }
-
-            void Remove(int key)
-     {
-         int hash = HashFunc(key);
-         while (table[hash] != NULL)
-         {
-             if (table[hash]->key == key)
-                 break;
-
-             hash = HashFunc(hash + 1);
-         }
-                if (table[hash] == NULL)
-         {
-                    cout<<"No Element found at key "<<key<<endl;
-                    return;
-                }
-                else
-                {
-                    delete table[hash];
-                }
-                cout<<"Element Deleted"<<endl;
-            }
-            ~HashMap()//destructor
-     {
-                for (int i = 0; i < TABLE_SIZE; i++)
-                {
-                    if (table[i] != NULL)
-                        delete table[i];
-                    delete[] table;
-                }
-            }
-    };
-
-    int main()//program execution starts from here
-    {
-        HashMap hash;
-        int key, value;
-        int choice;
-        while (1)
-        {
-            cout<<"\n----------------------"<<endl;
-            cout<<"Operations on Hash Table"<<endl;
-            cout<<"\n----------------------"<<endl;
-            cout<<"1.Insert element into the table"<<endl;
-            cout<<"2.Search element from the key"<<endl;
-            cout<<"3.Delete element at a key"<<endl;
-            cout<<"4.Exit"<<endl;
-            cout<<"Enter your choice: ";
-            cin>>choice;
-            switch(choice)
-            {
-            case 1:
-                cout<<"Enter element to be inserted: ";
-                cin>>value;
-                cout<<"Enter key at which element to be inserted: ";
-                cin>>key;
-                hash.Insert(key, value);
-                break;
-
-            case 2:
-                cout<<"Enter key of the element to be searched: ";
-                cin>>key;
-                if (hash.Search(key) == -1)
-                {
-             cout<<"No element found at key "<<key<<endl;
-             continue;
-         }
-         else
-         {
-             cout<<"Element at key "<<key<<" : ";
-             cout<<hash.Search(key)<<endl;
-         }
-                break;
-            case 3:
-                cout<<"Enter key of the element to be deleted: ";
-                cin>>key;
-                hash.Remove(key);
-                break;
-            case 4:
-                exit(1);
-            default:
-               cout<<"\nEnter correct option\n";
-           }
-        }
-        return 0;
-    }
+def Lsearch(k):
+    pos=k%max
+    global lcmp
+    lcmp=0
+    lcmp+=1
+    if(ht[pos]==k):
+        return pos
+    else:
+        loc=pos+1
+        for i in range(max-1):
+            lcmp+=1
+            if(ht[loc]==k):
+                return loc
+            loc=(loc+1)%max
+    return -1
+def Qsearch(k):
+    pos=k%max
+    global qcmp
+    qcmp=0
+    qcmp+=1
+    if(ht1[pos]==k):
+        return pos
+    else:
+        stepcount=1
+        for i in range(max-1):
+            newpos=(pos+(stepcount*stepcount))%max
+            qcmp+=1
+            if(ht1[newpos]==k):
+                return newpos
+            stepcount+=1
+    return -1
+def menu():
+    while True:
+        #os.system('clear')
+        print("***********Menu************")
+        print("1.Insert")
+        print("2.Display")
+        print("3.Search")
+        print("4.Exit")
+        n=int(input("Enter your choice: "))
+        if(n==1):
+            global ht, ht1, keys
+            ht=[-1]*max
+            ht1=[-1]*max
+            keys=[]
+            insert()
+        elif(n==2):
+            print("\nUsing Linear probing: ",ht)
+            print("\nUsing Quadratic probing: ",ht1)
+        elif(n==3):
+            print("\nUsing Linear probing: ",ht)
+            print("\nUsing Quadratic probing: ",ht1)
+            k=int(input("\nEnter key to search: "))
+            print("\n\tLinear search: ")
+            location=Lsearch(k)
+            if(location==-1):
+                print("Element not found")
+            else:
+                print("Element found at index: ", location, "with ", lcmp, "number of comparison(s).")
+            if(location!=-1):
+                location=Qsearch(k)
+                print("\n\tQuadratic search below:")
+                print("Element found at index: ", location, "with", qcmp, "number of comparison(s)")
+            elif(n==4):
+                print("\n\t\tProgram Ends.")
+                break
+            else:
+                print("\t\tInvalid input!")
+menu()
