@@ -1,0 +1,21 @@
+
+1.	Create the "Social_Media" collection with the specified fields:
+
+db.createCollection("Social_Media", { validator: { $jsonSchema: { bsonType: "object", required: ["User_Id", "User_Name", "No_of_Posts", "No_of_Friends", "Friends_List", "Interests"], properties: { User_Id: { bsonType: "int" }, User_Name: { bsonType: "string" }, No_of_Posts: { bsonType: "int" }, No_of_Friends: { bsonType: "int" }, Friends_List: { bsonType: "array" }, Interests: { bsonType: "array" } } } } }); 
+2.	Insert 20 documents into the "Social_Media" collection. You can use the insertMany() method to insert multiple documents.
+3.	Write queries for the following tasks:
+4.	List all the users from the "Social_Media" collection in a formatted manner:
+
+db.Social_Media.find().pretty(); 
+2.	Find all users having a number of posts greater than 100:
+
+db.Social_Media.find({ No_of_Posts: { $gt: 100 } }); 
+3.	List the user names and their respective Friends_List:
+
+db.Social_Media.find({}, { User_Name: 1, Friends_List: 1, _id: 0 }); 
+4.	Display the user ids and Friends list of users who have more than 5 friends:
+
+db.Social_Media.find({ No_of_Friends: { $gt: 5 } }, { User_Id: 1, Friends_List: 1, _id: 0 }); 
+5.	Display all users with the number of posts in descending order:
+
+db.Social_Media.find().sort({ No_of_Posts: -1 });
