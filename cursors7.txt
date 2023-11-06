@@ -1,23 +1,43 @@
-SET SERVEROUTPUT ON;
 DECLARE
-CURSOR C1(I_Product_Type varchar) IS SELECT Product_id,Product_Name,Product_Type,Price FROM Products
-WHERE I_Product_Type = Product_Type AND Price > 0;
-I_Product_id INTEGER;
-I_Product_Name VARCHAR(20);
-I_Product_Type VARCHAR(20);
-I_Price INTEGER;
+  v_min_price NUMBER := &min_price;  -- Prompt for user input: minimum price
+  v_max_price NUMBER := &max_price;  -- Prompt for user input: maximum price
+  
+  -- Declare variables to store product data
+  v_Product_id integer;
+  v_Product_Name varchar2(30);
+  v_Product_Type varchar(20);
+  v_Price number;
+  
+  -- Declare the explicit cursor with parameters
+  CURSOR product_cursor (min_price NUMBER, max_price NUMBER) IS
+    SELECT Product_id, Product_Name, Product_Type, Price
+    FROM Products
+    WHERE Product_Type = 'Apparel' AND Price BETWEEN min_price AND max_price;
 BEGIN
-    I_Product_Type:=&I_Product_Type;
-    OPEN C1(I_Product_Type);
-    LOOP
-        FETCH C1 INTO I_Product_id,I_Product_Name,I_Product_Type,I_Price;
-        EXIT WHEN C1%NOTFOUND;
-        DBMS_OUTPUT.put_line(I_Product_Name);
-        DBMS_OUTPUT.put_line(I_Product_Type);
-        DBMS_OUTPUT.put_line(I_Price);
-    END LOOP;
-    CLOSE C1;
+  -- Open the cursor and pass parameters
+  OPEN product_cursor(v_min_price, v_max_price);
+
+  -- Fetch and display product information
+  LOOP
+    FETCH product_cursor INTO
+      v_Product_id,
+      v_Product_Name,
+      v_Product_Type,
+      v_Price;
+
+    EXIT WHEN product_cursor%NOTFOUND;
+
+    DBMS_OUTPUT.PUT_LINE( v_Product_id);
+    DBMS_OUTPUT.PUT_LINE(v_Product_Name);
+    DBMS_OUTPUT.PUT_LINE( v_Product_Type);
+    DBMS_OUTPUT.PUT_LINE( v_Price);
+    DBMS_OUTPUT.PUT_LINE('------------------');
+  END LOOP;
+
+  -- Close the cursor
+  CLOSE product_cursor;
 END;
+/
 
 SET SERVEROUTPUT ON;
 DECLARE
