@@ -1,0 +1,24 @@
+1.	Create the "Student" collection with the specified fields, including the "Enrolled_Courses" array:
+
+db.createCollection("Student", { validator: { $jsonSchema: { bsonType: "object", required: ["Roll_No", "Name", "Class", "Marks", "Address", "Enrolled_Courses"], properties: { Roll_No: { bsonType: "string" }, Name: { bsonType: "string" }, Class: { bsonType: "string" }, Marks: { bsonType: "int" }, Address: { bsonType: "string" }, Enrolled_Courses: { bsonType: "array" } } } } }); 
+
+2.	Insert 10 documents into the "Student" collection. Ensure that the "Enrolled_Courses" field contains an array of courses for each student.
+3.	Write queries for the following tasks:
+4.	List the names of students who have enrolled in the courses "DBMS" and "TOC":
+
+db.Student.find({ Enrolled_Courses: { $all: ["DBMS", "TOC"] } }, { Name: 1, _id: 0 }); 
+2.	List the Roll numbers and class of students who have marks greater than 50 or are in the "TE" class:
+
+db.Student.find({ $or: [{ Marks: { $gt: 50 } }, { Class: "TE" }] }, { Roll_No: 1, Class: 1, _id: 0 }); 
+3.	Update the entire record of a student with Roll_No "A10". Make sure to specify the updated values for all fields:
+
+db.Student.update({ Roll_No: "A10" }, { Roll_No: "Updated_Roll_No", Name: "Updated_Name", Class: "Updated_Class", Marks: 99, // Updated Marks Address: "Updated_Address", Enrolled_Courses: ["Updated_Course1", "Updated_Course2"] }); 
+4.	Display the names of students with the 3rd and 4th highest marks:
+
+db.Student.find().sort({ Marks: -1 }).skip(2).limit(2).project({ Name: 1, _id: 0 }); 
+5.	Delete the records of students with marks less than 20:
+
+db.Student.deleteMany({ Marks: { $lt: 20 } }); 
+6.	Delete only the first record from the collection:
+
+db.Student.deleteOne({});
