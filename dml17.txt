@@ -1,0 +1,21 @@
+1.	Add the column "Email_Address" in the "Customer" table:
+sql
+ALTER TABLE Customer ADD Email_Address VARCHAR(255); 
+2.	Change the name of the column "Email_Address" to "Email_ID" in the "Customer" table:
+sql
+ALTER TABLE Customer RENAME COLUMN Email_Address TO Email_ID; 
+3.	Display the customer details with the highest balance in the account:
+sql
+SELECT * FROM Customer WHERE CustID = (SELECT CustID FROM Account ORDER BY Balance DESC LIMIT 1); 
+4.	Display the customer details with the lowest balance for account type "Saving Account":
+sql
+SELECT * FROM Customer c JOIN Account a ON c.CustID = a.CustID WHERE a.Account_type = 'Saving Account' ORDER BY a.Balance LIMIT 1; 
+5.	Display the customer details that live in Pune and have an age greater than 35:
+sql
+SELECT * FROM Customer WHERE Cust_Address LIKE '%Pune%' AND Age > 35; 
+6.	Display the Cust_ID, Name, and Age of the customer in ascending order of their age:
+sql
+SELECT CustID, Name, Age FROM Customer ORDER BY Age ASC; 
+7.	Display the Name and Branch ID of the customer grouped by the Account_type:
+sql
+SELECT Account_type, Name, Branch_ID FROM Customer c JOIN Account a ON c.CustID = a.CustID GROUP BY Account_type, Name, Branch_ID;
