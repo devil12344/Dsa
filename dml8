@@ -1,0 +1,27 @@
+1.	Modify the size of the column "Email_Address" to 20 in the Customer table:
+
+ALTER TABLE Customer MODIFY (Email_ID VARCHAR(20)); 
+
+2.	Change the column "Email_Address" to Not Null in the Customer table:
+sql
+ALTER TABLE Customer MODIFY (Email_ID VARCHAR(20) NOT NULL); 
+
+3.	Display the total number of customers with a balance greater than 50,000 Rs:
+sql
+SELECT COUNT(*) AS TotalCustomers FROM Customer c JOIN Account a ON c.CustID = a.CustID WHERE a.Balance > 50000; 
+
+4.	Display the average balance for the account type "Saving Account":
+sql
+SELECT AVG(Balance) AS AverageBalance FROM Account WHERE Account_type = 'Saving Account'; 
+
+5.	Display customer details for those who live in Pune or have names starting with 'A':
+sql
+SELECT * FROM Customer WHERE Cust_Address LIKE '%Pune%' OR Name LIKE 'A%'; 
+
+6.	Create a table "Saving_Account" using the Account table:
+sql
+CREATE TABLE Saving_Account AS SELECT Account_no, Branch_ID, CustID, date_open, Balance FROM Account WHERE Account_type = 'Saving Account'; 
+
+7.	Display customer details age-wise for those with a balance of at least 20,000 Rs:
+sql
+SELECT c.Name, c.Age, a.Balance FROM Customer c JOIN Account a ON c.CustID = a.CustID WHERE a.Balance >= 20000 ORDER BY c.Age;
