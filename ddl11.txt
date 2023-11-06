@@ -1,0 +1,36 @@
+-- Create the Customer table
+CREATE TABLE Customer (
+  CustID INT PRIMARY KEY,
+  Name VARCHAR(50),
+  Cust_Address VARCHAR(100),
+  Phone_no VARCHAR(15),
+  Email_ID VARCHAR(255),
+  Age INT
+);
+
+-- Create the Branch table
+CREATE TABLE Branch (
+  Branch_ID INT PRIMARY KEY,
+  Branch_Name VARCHAR(50),
+  Address VARCHAR(100)
+);
+
+-- Create the Account table with foreign keys referencing Customer and Branch
+CREATE TABLE Account (
+  Account_no INT PRIMARY KEY,
+  Branch_ID INT,
+  CustID INT,
+  date_open DATE,
+  Account_type VARCHAR(50),
+  Balance DECIMAL(10, 2),
+  FOREIGN KEY (Branch_ID) REFERENCES Branch(Branch_ID),
+  FOREIGN KEY (CustID) REFERENCES Customer(CustID)
+);
+
+CREATE INDEX idx_Account_Account_no ON Account(Account_no);
+
+CREATE VIEW Customer_Info AS
+SELECT * FROM Customer WHERE Age < 45;
+
+ALTER TABLE Branch
+ADD COLUMN Branch_sequence INT AUTO_INCREMENT PRIMARY KEY;
