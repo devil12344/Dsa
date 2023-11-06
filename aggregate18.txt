@@ -1,0 +1,58 @@
+db.Student_Data.aggregate([
+  {
+    $group: {
+      _id: "$Department",
+      Students: { $push: { Student_ID: "$Student_ID", Student_Name: "$Student_Name", Marks: "$Marks" } },
+      AvgMarks: { $avg: "$Marks" }
+    }
+  }
+]);
+
+db.Student_Data.aggregate([
+  {
+    $group: {
+      _id: "$Department",
+      TotalStudents: { $sum: 1 }
+    }
+  }
+]);
+
+db.Student_Data.aggregate([
+  {
+    $group: {
+      _id: "$Department",
+      MaxMarks: { $max: "$Marks" }
+    }
+  },
+  {
+    $lookup: {
+      from: "Student_Data",
+      localField: "MaxMarks",
+      foreignField: "Marks",
+      as: "TopStudents"
+    }
+  },
+  {
+    $unwind: "$TopStudents"
+  },
+  {
+    $project: {
+      _id: 0,
+      Department: "$_id",
+      Student_ID: "$TopStudents.Student_ID",
+      Student_Name: "$TopStudents.Student_Name",
+      Marks: "$MaxMarks"
+    }
+  },
+  {
+    $sort: { Department: 1, Marks: -1 }
+  }
+]);
+
+db.Student_Data.createIndex({ Student_ID: 1 });
+
+db.Student_Data.createIndex({ Student_Name: 1, Department: 1 });
+
+db.Student_Data.dropIndex({ Student_ID: 1 });
+
+db.Student_Data.dropIndex({ Student_Name: 1, Department: 1 });
