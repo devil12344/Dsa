@@ -1,0 +1,32 @@
+create table IF NOT EXISTS customer(cust_id integer,cust_name varchar(20),cust_addr varchar(20),email_id varchar(20),phone_no integer,age integer);
+create table IF NOT EXISTS branch(branch_id integer,branch_name varchar(20),branch_addr varchar(10));
+create table IF NOT EXISTS account(account_id integer,branch_id integer,cust_id integer,date_open date,account_type varchar(10),balance integer);
+
+alter table customer
+modify email_id varchar(40);
+
+alter table customer
+modify email_id varchar(40) NOT NULL;
+
+select count(*)
+from account 
+where balance>50000;
+
+select account_type,avg(balance)
+from account
+where account_type = "saving";
+
+SELECT *
+FROM customer 
+WHERE customer.cust_addr LIKE '%Pune%' OR customer.cust_name LIKE 'A%';
+
+CREATE TABLE Saving_Account AS
+SELECT account_id, branch_id, cust_id, date_open, balance
+FROM account
+WHERE account_type = 'Saving Account';
+
+SELECT *
+FROM Customer 
+JOIN account  ON customer.cust_id = account.cust_id
+WHERE account.balance >= 20000
+ORDER BY customer.Age;
