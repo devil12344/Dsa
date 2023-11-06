@@ -1,0 +1,29 @@
+db.Social_Media.insertMany([
+  {
+    User_Id: 1,
+    User_Name: "User1",
+    No_of_Posts: 150,
+    No_of_Friends: 10,
+    Friends_List: ["FriendA", "FriendB", "FriendC"],
+    Interests: ["Interest1", "Interest2"]
+  },
+  // Add more documents here...
+]);
+
+db.Social_Media.find().forEach(function(user) {
+  print("User ID: " + user.User_Id);
+  print("User Name: " + user.User_Name);
+  print("No. of Posts: " + user.No_of_Posts);
+  print("No. of Friends: " + user.No_of_Friends);
+  print("Friends List: " + user.Friends_List);
+  print("Interests: " + user.Interests);
+  print("\n");
+});
+
+db.Social_Media.find({ No_of_Posts: { $gt: 100 } });
+
+db.Social_Media.find({}, { User_Name: 1, Friends_List: 1, _id: 0 });
+
+db.Social_Media.find({ No_of_Friends: { $gt: 5 } }, { User_Id: 1, Friends_List: 1, _id: 0 });
+
+db.Social_Media.find().sort({ No_of_Posts: -1 });
