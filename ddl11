@@ -1,0 +1,17 @@
+CREATE TABLE Customer ( CustID INT PRIMARY KEY, Name VARCHAR(255), Cust_Address VARCHAR(255), Phone_no VARCHAR(15), Email_ID VARCHAR(255), Age INT ); CREATE TABLE Branch ( Branch_ID INT PRIMARY KEY, Branch_Name VARCHAR(255), Address VARCHAR(255) ); CREATE TABLE Account ( Account_no INT PRIMARY KEY, Branch_ID INT, CustID INT, date_open DATE, Account_type VARCHAR(50), Balance DECIMAL(10, 2), FOREIGN KEY (Branch_ID) REFERENCES Branch(Branch_ID), FOREIGN KEY (CustID) REFERENCES Customer(CustID) ); 
+2.	Drawing an ER diagram: Unfortunately, I cannot draw diagrams here, but you can use ER diagram drawing tools like Lucidchart, Draw.io, or even pen and paper to visually represent the relationships between these tables and the attributes within them.
+3.	Create an index on the primary key column of the "Account" table:
+sql
+CREATE INDEX idx_Account_Account_no ON Account (Account_no); 
+4.	Create a view "Customer_Info" displaying customer details for age less than 45:
+sql
+CREATE VIEW Customer_Info AS SELECT * FROM Customer WHERE Age < 45; 
+5.	Update the view with the open date as '16/4/2017':
+sql
+UPDATE Customer_Info SET date_open = TO_DATE('16/4/2017', 'DD/MM/YYYY'); 
+6.	Create a sequence on the "Branch" table:
+sql
+CREATE SEQUENCE Branch_Seq START WITH 1 INCREMENT BY 1 NOCACHE; 
+7.	Create a synonym "Branch_info" for the "Branch" table:
+sql
+CREATE SYNONYM Branch_info FOR Branch;
