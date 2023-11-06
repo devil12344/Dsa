@@ -1,0 +1,21 @@
+SELECT e.First_name, e.Last_name, e.Salary
+FROM Employee e
+WHERE e.Salary > (SELECT Salary FROM Employee WHERE Last_name = 'Singh');
+
+SELECT e.First_name, e.Last_name
+FROM Employee e
+JOIN Departments d ON e.Department_id = d.Department_id
+JOIN Locations l ON d.Location_id = l.Location_id
+WHERE e.Manager_id IS NOT NULL AND l.Country_id = 'US';
+
+SELECT First_name, Last_name, Salary
+FROM Employee
+WHERE Salary > (SELECT AVG(Salary) FROM Employee);
+
+SELECT e.Employee_id, e.Last_name, e.Manager_id, m.Last_name AS Manager_Name
+FROM Employee e
+LEFT JOIN Employee m ON e.Manager_id = m.Employee_id;
+
+SELECT First_name, Last_name, Hire_date
+FROM Employee
+WHERE Hire_date > (SELECT Hire_date FROM Employee WHERE Last_name = 'Jones');
