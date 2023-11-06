@@ -1,0 +1,5 @@
+db.Stud.aggregate([{$group:{_id:"$Department",avgMarks:{$avg:"$Marks"}}}])
+
+db.Stud.aggregate([{$group:{_id:"$Department",avgMarks:{$avg:"$Marks"},students:{$push:"$$ROOT"}}}]).pretty()
+
+db.Stud.aggregate([{$group:{_id:"$Department",highest:{$max:"$Marks"},students:{$push:"$$ROOT"}}},{$project:{_id:1,avgMarks:1,Topper:{$filter:{input:"$students",as:"student",cond:{"$eq":["$$student.Marks","$highest"]}}}}},{$sort:{"highest":-1}}]).pretty()
