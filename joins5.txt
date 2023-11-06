@@ -1,0 +1,57 @@
+CREATE TABLE Manager (
+  Manager_id INTEGER PRIMARY KEY,
+  Manager_name VARCHAR(50)
+);
+
+-- Create the Locations table
+CREATE TABLE Locations (
+  Location_id INTEGER PRIMARY KEY,
+  Street_address VARCHAR(100),
+  Postal_code VARCHAR(20),
+  City VARCHAR(50),
+  State VARCHAR(50),
+  Country_id VARCHAR(2)
+);
+
+-- Create the Departments table with a foreign key reference to Manager
+CREATE TABLE Departments (
+  Department_id INTEGER PRIMARY KEY,
+  Department_name VARCHAR(50),
+  Manager_id INTEGER,
+  Location_id INTEGER,
+  FOREIGN KEY (Manager_id) REFERENCES Manager(Manager_id),
+  FOREIGN KEY (Location_id) REFERENCES Locations(Location_id)
+);
+CREATE TABLE IF NOT EXISTS Employee (
+  Employee_id integer PRIMARY KEY,
+  First_name varchar(50),
+  Last_name varchar(50),
+  Hire_date DATE,
+  Salary integer,
+  Job_title varchar(50),
+  Manager_id integer,
+  Department_id integer,
+  FOREIGN KEY (Manager_id) REFERENCES Employee(Employee_id),
+  FOREIGN KEY (Department_id) REFERENCES Departments(Department_id)
+);
+SELECT e.First_name, e.Last_name, e.Salary
+FROM Employee e
+JOIN Departments d ON e.Department_id = d.Department_id
+WHERE e.Salary > (SELECT AVG(Salary) FROM Employee WHERE Department_id IN (SELECT Department_id FROM Departments WHERE Department_name LIKE 'IT%'));
+
+select First_name,Last_name,Salary
+from Employee
+where Salary = (select min(Salary) from Employee);
+
+SELECT Employee_id, First_name, Last_name, Salary
+FROM Employee 
+WHERE Salary > (SELECT AVG(Salary) FROM Employee WHERE Department_id = Employee.Department_id);
+
+SELECT d.Department_name, m.Manager_name, l.City
+FROM Departments d
+LEFT JOIN Manager m ON d.Manager_id = m.Manager_id
+LEFT JOIN Locations l ON d.Location_id = l.Location_id;
+
+SELECT e.First_name, e.Last_name, e.Hire_date, e.Salary
+FROM Employee e
+WHERE e.Job_title = 'Manager' AND MONTHS_BETWEEN(SYSDATE, e.Hire_date) >= 180;
