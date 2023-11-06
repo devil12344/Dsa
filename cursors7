@@ -1,0 +1,47 @@
+SET SERVEROUTPUT ON;
+DECLARE
+CURSOR C1(I_Product_Type varchar) IS SELECT Product_id,Product_Name,Product_Type,Price FROM Products
+WHERE I_Product_Type = Product_Type AND Price > 0;
+I_Product_id INTEGER;
+I_Product_Name VARCHAR(20);
+I_Product_Type VARCHAR(20);
+I_Price INTEGER;
+BEGIN
+    I_Product_Type:=&I_Product_Type;
+    OPEN C1(I_Product_Type);
+    LOOP
+        FETCH C1 INTO I_Product_id,I_Product_Name,I_Product_Type,I_Price;
+        EXIT WHEN C1%NOTFOUND;
+        DBMS_OUTPUT.put_line(I_Product_Name);
+        DBMS_OUTPUT.put_line(I_Product_Type);
+        DBMS_OUTPUT.put_line(I_Price);
+    END LOOP;
+    CLOSE C1;
+END;
+
+SET SERVEROUTPUT ON;
+DECLARE
+CURSOR C2 IS SELECT Product_id,Product_Name,Product_Type,Price FROM Products
+WHERE Price > 5000;
+I_Product_id INTEGER;
+I_Product_Name VARCHAR(20);
+I_Product_Type VARCHAR(20);
+I_Price INTEGER;
+BEGIN
+    OPEN C2;
+    LOOP
+        FETCH C2 INTO I_Product_id,I_Product_Name,I_Product_Type,I_Price;
+        EXIT WHEN C2%NOTFOUND;
+        DBMS_OUTPUT.put_line(I_Product_Name);
+        DBMS_OUTPUT.put_line(I_Product_Type);
+        DBMS_OUTPUT.put_line(I_Price);
+    END LOOP;
+    CLOSE C2;
+END;
+
+SET SERVEROUTPUT ON;
+DECLARE
+BEGIN
+    UPDATE PRODUCTS SET price = price + 1000;
+    DBMS_OUTPUT.put_line(SQL%ROWCOUNT);
+END;
