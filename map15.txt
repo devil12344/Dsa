@@ -1,0 +1,16 @@
+var map = function(){
+... emit(this.authorName,this.title);
+... }
+var reduce = function(key,val){ return (val); }         
+db.book.mapReduce(map,reduce,{out:"A4"});
+db.A4.find()
+
+var map = function(key,val){ if(this.status === "B"){ emit(this.authorName,this.title)}; } 
+> var reduce = function(key,val){ return (val); }
+> db.book.mapReduce(map,reduce,{out:"A5"});
+> db.A5.find()
+
+var map = function(key,val){ if(this.price > 300){ emit(this.authorName,{Title:this.title,Price:this.price})}; }
+var reduce = function(key,val){ return (val); }
+db.book.mapReduce(map,reduce,{out:"A6"});
+db.A6.find()
