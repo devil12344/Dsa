@@ -1,0 +1,32 @@
+CREATE OR REPLACE TRIGGER trig_1
+BEFORE
+UPDATE OF salary ON Employee
+FOR EACH ROW
+DECLARE
+BEGIN
+    IF :OLD.salary != :NEW.salary  THEN
+        INSERT INTO Salary_Backup VALUES (:OLD.emp_id, :OLD.salary, :NEW.salary, :NEW.salary - :OLD.salary);
+    end if;
+END;
+
+DECLARE
+BEGIN
+    UPDATE Employee SET salary = 3000 WHERE emp_id = 1;
+END;
+
+
+CREATE OR REPLACE TRIGGER trig_1_del
+BEFORE
+DELETE ON Employee
+FOR EACH ROW
+DECLARE
+BEGIN
+    IF :OLD.designation = 'CEO' THEN
+        RAISE_APPLICATION_ERROR(-20000, 'SRY, cannot delete the CEO');
+    end if;
+END;
+
+DECLARE
+BEGIN
+    DELETE FROM Employee WHERE emp_id = 2;
+END;
