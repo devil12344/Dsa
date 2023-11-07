@@ -1,0 +1,11 @@
+db.movies.aggregate([{$group:{_id:"$Director",TotalMovies:{$sum:1}}}])
+
+db.movies.aggregate([{$group:
+                            {_id:"$Director", maxBoxC:{$max:"$BoxC"},highestMovie:{$push:"$$ROOT"}}},
+                      {$project:
+                            { _id:1,maxBox:1,TopMovie:
+                                    {$filter:{input:"$highestMovie",as:"movie",cond:{$eq:["$$movie.BoxC","$maxBoxC"]}}}
+                            }
+                      }])
+
+db.movies.aggregate([{$group:{_id:"$Director", maxBoxC:{$max:"$BoxC"},highestMovie:{$push:"$$ROOT"}}},{$project:{ _id:1,maxBox:1,TopMovie:{$filter:{input:"$highestMovie",as:"movie",cond:{$eq:["$$movie.BoxC","$maxBoxC"]}}}}},{ $sort:{'maxBoxC':1}}]).pretty()
