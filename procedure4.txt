@@ -1,0 +1,47 @@
+SET SERVEROUTPUT ON;
+CREATE OR REPLACE PROCEDURE procd_2(
+I_acNo in NUMBER, I_interest in NUMBER)
+IS
+I_balance NUMBER;
+I_si NUMBER;
+I_Years NUMBER;
+BEGIN
+    SELECT Balance ,NoOfYears INTO I_balance,I_Years FROM Account WHERE Account_No = I_acNo;
+    I_si := (I_balance * I_interest * I_Years)/100;
+    INSERT INTO Earned_Interest VALUES (I_acNo,I_si);
+    DBMS_OUTPUT.PUT_LINE(I_si);
+    SELECT * FROM Earned_Interest;
+END;
+
+DECLARE
+BEGIN
+    procd_2(123,10);
+END;
+
+
+
+SET SERVEROUTPUT ON;
+CREATE OR REPLACE FUNCTION F1
+RETURN INT IS
+I_ROWS INTEGER;
+I_BALANCE NUMBER;
+I_ACC NUMBER;
+I_NAME VARCHAR(20);
+CURSOR C1 IS SELECT CUST_NAME,BALANCE,account_no FROM ACCOUNT WHERE BALANCE > 50000;
+BEGIN
+    OPEN C1;
+    LOOP
+        FETCH C1 INTO I_NAME,I_BALANCE,I_ACC;
+        EXIT WHEN C1%NOTFOUND;
+        DBMS_OUTPUT.put_line('ACC:' || i_acc || 'NAME : ' || i_name);
+    END LOOP;
+    I_ROWS := C1%ROWCOUNT;
+    CLOSE C1;
+    RETURN I_ROWS;
+END;
+
+DECLARE
+I_ROWS INTEGER;
+BEGIN
+    I_ROWS := F1();
+END;
