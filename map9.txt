@@ -1,0 +1,26 @@
+var map2 = function(){ if(this.Class === "TE"){ emit(this.Department,this.Marks); } };
+> var red2 = function(Department,Marks){return Array.sum(Marks)};
+> db.Stud.mapReduce(map2,red2,{out:"A1"});
+
+var map2 = function(){ if(this.Class === "TE"){ emit(this.Department,this.Marks); } };
+var red2 = function(Department,Marks){return Math.max(...Marks)}; 
+> db.Stud.mapReduce(map2,red2,{out:"A1"});
+
+var map2 = function(){                                                               
+... if(this.Class === "TE"){
+... emit(this.Department,{TotalMarks:this.Marks,count:1});
+... }
+... };
+
+var red2 = function(Department,Marks){
+    var redVal = {TotalMarks:0,count:0};
+    Marks.forEach(function(val){
+        redVal.TotalMarks += val.TotalMarks;
+        redVal.count += val.count;
+    });
+    return redVal.TotalMarks/redVal.count
+};
+
+db.Stud.mapReduce(map2,red2,{out:"A3"});
+{ "result" : "A3", "ok" : 1 }
+> db.A3.find()
