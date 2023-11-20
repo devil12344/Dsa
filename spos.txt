@@ -1,0 +1,660 @@
+//best,worst,first and next  fit
+
+import java.util.Arrays;
+import java.util.Scanner;
+class first_fit
+{
+   void firstFit(int blockSize[], int m, int processSize[], int n)
+   {
+       int allocation[] = new int[n];
+       for (int i = 0; i < allocation.length; i++)
+           allocation[i] = -1;
+       for (int i = 0; i < n; i++)
+       {
+           for (int j = 0; j < m; j++)
+           {
+               if (blockSize[j] >= processSize[i])
+               {
+                   allocation[i] = j;
+                   blockSize[j] -= processSize[i];
+                   break;
+               }
+           }
+       }
+       System.out.println("\nProcess No.	Process Size	Block no.");
+       for (int i = 0; i < n; i++)
+       {
+           System.out.print(" " + (i+1) + "		" +
+                            processSize[i] + "		");
+           if (allocation[i] != -1)
+               System.out.print(allocation[i] + 1);
+           else
+               System.out.print("Not Allocated");
+           System.out.println();
+       }
+   }
+}
+class next_fit
+{
+   void NextFit(int blockSize[], int m, int processSize[], int n) {
+        int allocation[] = new int[n], j = 0;
+        Arrays.fill(allocation, -1);
+        for (int i = 0; i < n; i++) {
+            int count =0;
+            while (j < m) {
+                count++;    
+                if (blockSize[j] >= processSize[i]) {
+                    allocation[i] = j;
+                    blockSize[j] -= processSize[i];
+                    break;
+                }
+                j = (j + 1) % m;
+            }
+        }
+        System.out.print("\nProcess No.	Process Size	Block no.\n");
+        for (int i = 0; i < n; i++) {
+            System.out.print( i + 1 + "		" + processSize[i]
+                    + "		");
+            if (allocation[i] != -1) {
+                System.out.print(allocation[i] + 1);
+            } else {
+                System.out.print("Not Allocated");
+            }
+            System.out.println("");
+        }
+    }
+}
+class worst_fit
+{
+    void worstFit(int blockSize[], int m, int processSize[],
+                                                     int n)
+    {
+        int allocation[] = new int[n];
+        for (int i = 0; i < allocation.length; i++)
+            allocation[i] = -1;
+        for (int i=0; i<n; i++)
+        {
+            int wstIdx = -1;
+            for (int j=0; j<m; j++)
+            {
+                if (blockSize[j] >= processSize[i])
+                {
+                    if (wstIdx == -1)
+                        wstIdx = j;
+                    else if (blockSize[wstIdx] < blockSize[j])
+                        wstIdx = j;
+                }
+            }
+            if (wstIdx != -1)
+            {
+                allocation[i] = wstIdx;
+                blockSize[wstIdx] -= processSize[i];
+            }
+        }
+        System.out.println("\nProcess No.	Process Size	Block no.\n");
+        for (int i = 0; i < n; i++)
+        {
+            System.out.print("   " + (i+1) + "		" + processSize[i] + "		");
+            if (allocation[i] != -1)
+                System.out.print(allocation[i] + 1);
+            else
+                System.out.print("Not Allocated");
+            System.out.println();
+        }
+    }
+}
+class best_fit
+{
+    void bestFit(int blockSize[], int m, int processSize[], int n)
+    {
+        int allocation[] = new int[n];
+        for (int i = 0; i < allocation.length; i++)
+            allocation[i] = -1;
+        for (int i=0; i<n; i++)
+        {
+            int bestIdx = -1;
+            for (int j=0; j<m; j++)
+            {
+                if (blockSize[j] >= processSize[i])
+                {
+                    if (bestIdx == -1)
+                        bestIdx = j;
+                    else if (blockSize[bestIdx] > blockSize[j])
+                        bestIdx = j;
+                }
+            }
+            if (bestIdx != -1)
+            {
+                allocation[i] = bestIdx;
+                blockSize[bestIdx] -= processSize[i];
+            }
+        }
+        System.out.println("\nProcess No.	Process Size	Block no.\n");
+        for (int i = 0; i < n; i++)
+        {
+            System.out.print("   " + (i+1) + "		" + processSize[i] + "		");
+            if (allocation[i] != -1)
+                System.out.print(allocation[i] + 1);
+            else
+                System.out.print("Not Allocated");
+            System.out.println();
+        }
+    }
+}
+public class Main {
+   public static void main(String[] args){
+       first_fit first = new first_fit();
+       next_fit next = new next_fit();
+       worst_fit worst = new worst_fit();
+       best_fit best = new best_fit();
+       Scanner scan = new Scanner(System.in);
+       while(true){
+           int choice;
+           System.out.println();
+           System.out.println("Enter the number of Blocks: ");
+           int m = scan.nextInt();
+           System.out.println("Enter the number of Processes: ");
+           int n = scan.nextInt();
+           int blockSize[] = new int[m];
+           int processSize[] = new int[n];
+           System.out.println("Enter the Size of all the blocks: ");
+           for (int i = 0; i<m; i++){
+               blockSize[i] = scan.nextInt();
+           }
+           System.out.println("Enter the size of all processes: ");
+           for (int i = 0; i<n; i++){
+               processSize[i] = scan.nextInt();
+           }
+           System.out.println();
+           System.out.println("Menu");
+           System.out.println("1. First Fit ");
+           System.out.println("2. Next Fit");
+           System.out.println("3. Worst Fit");
+           System.out.println("4. Best Fit");
+           System.out.println("5. exit");
+           System.out.println("Select the algorithm you want to implement: ");
+           choice = scan.nextInt();
+           switch(choice){
+               case 1:
+                   System.out.println("First Fit Output");
+                   first.firstFit(blockSize, m, processSize, n);
+                   break;
+               case 2:
+                   System.out.println("Next Fit Output");
+                   next.NextFit(blockSize, m, processSize, n);
+                   break;
+               case 3:
+                   System.out.println("Worst Fit Output");
+                   worst.worstFit(blockSize, m, processSize, n);
+                   break;
+               case 4:
+                   System.out.println("Best Fit Output");
+                   best.bestFit(blockSize, m, processSize, n);
+                   break;
+               case 5:
+                   System.out.println("Exiting the code...");
+                   return;
+               default:
+                   System.out.println("Invalid option");
+           }
+       }
+   }
+}
+
+
+// lru and optimal
+import java.util.*;
+public class full {
+  static int[] stream = new int[30];
+  public static void main(String[] args) {
+    int i, ch;
+    try {
+      Operations op = new Operations();
+      System.out.print("Enter number of pages in page stream:");
+      Scanner sc = new Scanner(System.in);
+      int no = sc.nextInt();
+      System.out.print("Enter page stream:");
+      for (i = 0; i < no; i++) {
+        stream[i] = sc.nextInt();
+      }
+      while (true) {
+        System.out.println("*************Menu*************");
+        System.out.println("1.LRU");
+        System.out.println("2.Optimal");
+        System.out.println("3.Exit");
+        System.out.print("Enter your Choice:");
+        ch = sc.nextInt();
+        switch (ch) {
+        case 1:
+          op.lru(no, stream);
+          break;
+        case 2:
+          op.optimal(no, stream);
+          break;
+        case 3:
+          return;
+        }
+      }
+    } catch (Exception e) {}
+  }
+}
+class Operations {
+  int i, j;
+  Scanner sc = new Scanner(System.in);
+  int found(int no, int fs, int[] frame, int page) {
+    for (i = 0; i < fs; i++)
+      if (frame[i] == page)
+        return 1;
+    return 0;
+  }
+  public int empty(int[] frame, int fs) {
+    for (i = 0; i < fs; i++)
+      if (frame[i] == 99)
+        return i;
+    return -1;
+  }
+  public int max(int[] lrud, int fs) {
+    j = 0;
+    for (i = 1; i < fs; i++)
+      if (lrud[i] > lrud[j])
+        j = i;
+    return j;
+  }
+  public void lru(int no, int[] stream) {
+    System.out.print("Enter frame size:");
+    int fs = sc.nextInt();
+    int[] frame = new int[fs];
+    int[] lrud = new int[fs];
+    int i, pf = 0, Hit = 0;
+    for (i = 0; i < fs; i++) {
+      frame[i] = 99;
+      lrud[i] = 0;
+    }
+    int j;
+    System.out.println("Page\tframe contents");
+    System.out.print("\t");
+    for (j = 0; j < fs; j++)
+      System.out.print(" " + frame[j]);
+    for (i = 0; i < no; i++) {
+      if (found(no, fs, frame, stream[i]) == 0) {
+        int loc = empty(frame, fs);
+        if (loc != -1) {
+          for (j = 0; j < fs; j++)
+            lrud[j]++;
+          frame[loc] = stream[i];
+          lrud[loc] = 0;
+        } else {
+          loc = max(lrud, fs);
+          frame[loc] = stream[i];
+          for (j = 0; j < fs; j++)
+            lrud[j]++;
+          lrud[loc] = 0;
+        }
+      } else {
+        Hit = Hit + 1;
+        for (j = 0; j < fs; j++) {
+          if (frame[j] != stream[i])
+            lrud[j]++;
+          else
+            lrud[j] = 0;
+        }
+      }
+      System.out.print("\n" + stream[i] + "\t");
+      for (j = 0; j < fs; j++)
+        System.out.print(" " + frame[j]);
+    }
+    pf = no - Hit;
+    System.out.println("\nTotal number of page faults by LRU Technique:" + pf);
+  }
+  int futureD(int[] stream, int no, int begin, int page) {
+    for (i = begin + 1; i < no; i++)
+      if (page == stream[i])
+        return (i - begin);
+    return (9999);
+  }
+  public void optimal(int no, int[] stream) {
+    System.out.print("Enter frame size:");
+    int fs = sc.nextInt();
+    int[] frame = new int[fs];
+    int[] optd = new int[fs];
+    int pf = 0, Hit = 0;
+    for (i = 0; i < fs; i++) {
+      frame[i] = 99;
+      optd[i] = 0;
+    }
+    System.out.println("Page\tframe contents");
+    System.out.print("\t");
+    for (j = 0; j < fs; j++)
+      System.out.print(" " + frame[j]);
+    for (i = 0; i < no; i++) {
+      if (found(no, fs, frame, stream[i]) == 0) {
+        int loc = empty(frame, fs);
+        if (loc != -1)
+          frame[loc] = stream[i];
+        else {
+          loc = max(optd, fs);
+          frame[loc] = stream[i];
+        }
+      } else {
+        Hit = Hit + 1;
+      }
+      for (int k = 0; k < fs; k++) {
+        optd[k] = futureD(stream, no, i, frame[k]);
+      }
+      System.out.print("\n" + stream[i] + "\t");
+      for (j = 0; j < fs; j++)
+        System.out.print(" " + frame[j]);
+    }
+    pf = no - Hit;
+    System.out.println("\nTotal number of page faults by Optimal Page Replacement Technique:" + pf);
+  }
+} 
+ 
+
+//scheduling
+import java.util.*;
+class process {
+  public int id, at, bt, wt, tat, rt, st, ct, rest, priority;
+}
+class prog {
+  public static void main(String[] args) {
+    prog obj = new prog();
+    Scanner sc = new Scanner(System.in);
+    int nop;
+
+    System.out.println("Enter no of processes");
+    nop = sc.nextInt();
+    process pro[] = new process[nop];
+    for (int i = 0; i < nop; i++) {
+      int at, bt;
+      System.out.print("Arrival time of process " + i + " : ");
+      at = sc.nextInt();
+      System.out.print("Burst time of process " + i + " : ");
+      bt = sc.nextInt();
+
+      pro[i] = new process();
+      pro[i].id = i;
+      pro[i].at = at;
+      pro[i].bt = bt;
+      pro[i].rt = bt;
+    }
+    int choice;
+    do {
+      System.out.println("\nMenu");
+      System.out.println("1. FCFS");
+      System.out.println("2. SJF");
+      System.out.println("3. Round Robin");
+      System.out.println("4. Priority");
+      System.out.println("5. Exit");
+      System.out.print("Enter your choice: ");
+      choice = sc.nextInt();
+      switch (choice) {
+      case 1:
+        obj.fcfs(nop, pro);
+        break;
+      case 2:
+        obj.sjf(nop, pro);
+        break;
+      case 3:
+        obj.roundRobin(nop, pro);
+        break;
+      case 4:
+        obj.priorityScheduling(nop, pro);
+        break;
+      case 5:
+        System.out.println("Exiting...");
+        System.exit(0);
+        break;
+      default:
+        System.out.println("Invalid choice");
+      }
+    } while (choice != 5);
+  }
+  void fcfs(int nop, process pro[]) {
+
+    process temp;
+    for (int i = 0; i < nop - 1; i++) {
+      for (int j = i + 1; j < nop; j++) {
+        if (pro[i].at > pro[j].at) {
+
+          temp = pro[i];
+          pro[i] = pro[j];
+          pro[j] = temp;
+        }
+        if (pro[i].at == pro[j].at) {
+          if (pro[i].bt > pro[j].bt) {
+
+            temp = pro[i];
+            pro[i] = pro[j];
+            pro[j] = temp;
+          }
+        }
+      }
+    }
+    int time = 0;
+
+    for (int i = 0; i < nop; i++) {
+      while (pro[i].at > time) {
+        time++;
+      }
+      pro[i].st = time;
+      time += pro[i].bt;
+      pro[i].ct = time;
+      pro[i].wt = pro[i].st - pro[i].at;
+      pro[i].tat = pro[i].wt + pro[i].bt;
+      pro[i].rest = pro[i].wt;
+    }
+    print(nop, pro);
+  }
+  void sjf(int nop, process pro[]) {
+
+    process temp;
+    for (int i = 0; i < nop - 1; i++) {
+      for (int j = i + 1; j < nop; j++) {
+        if (pro[i].bt > pro[j].bt) {
+          temp = pro[i];
+          pro[i] = pro[j];
+          pro[j] = temp;
+        }
+      }
+    }
+    int time = 0;
+    for (int i = 0; i < nop; i++) {
+      while (pro[i].at > time) {
+        time++;
+      }
+      pro[i].st = time;
+      time += pro[i].bt;
+      pro[i].ct = time;
+      pro[i].tat = pro[i].ct - pro[i].at;
+      pro[i].wt = pro[i].tat - pro[i].bt;
+    }
+    print(nop, pro);
+  }
+  void roundRobin(int nop, process pro[]) {
+    Scanner sc = new Scanner(System.in);
+    System.out.print("Enter time quantum: ");
+    int quantum = sc.nextInt();
+    int rem_bt[] = new int[nop];
+    for (int i = 0; i < nop; i++) {
+      rem_bt[i] = pro[i].bt;
+    }
+    int t = 0;
+    while (true) {
+      boolean done = true;
+      for (int i = 0; i < nop; i++) {
+        if (rem_bt[i] > 0) {
+          done = false;
+          if (rem_bt[i] > quantum) {
+            t += quantum;
+            rem_bt[i] -= quantum;
+          } else {
+            t = t + rem_bt[i];
+            pro[i].ct = t;
+            rem_bt[i] = 0;
+          }
+        }
+      }
+      if (done == true)
+        break;
+    }
+
+    for (int i = 0; i < nop; i++) {
+      pro[i].tat = pro[i].ct - pro[i].at;
+      pro[i].wt = pro[i].tat - pro[i].bt;
+    }
+    print(nop, pro);
+  }
+  void priorityScheduling(int nop, process pro[]) {
+    Scanner sc = new Scanner(System.in);
+    for (int i = 0; i < nop; i++) {
+      System.out.print("Enter priority for process " + (i + 1) + ": ");
+      pro[i].priority = sc.nextInt();
+    }
+
+    process temp;
+    for (int i = 0; i < nop - 1; i++) {
+      for (int j = i + 1; j < nop; j++) {
+        if (pro[i].priority > pro[j].priority) {
+          temp = pro[i];
+          pro[i] = pro[j];
+          pro[j] = temp;
+        }
+      }
+    }
+    int time = 0;
+    for (int i = 0; i < nop; i++) {
+      while (pro[i].at > time) {
+        time++;
+      }
+      pro[i].st = time;
+      time += pro[i].bt;
+      pro[i].ct = time;
+      pro[i].tat = pro[i].ct - pro[i].at;
+      pro[i].wt = pro[i].tat - pro[i].bt;
+    }
+    print(nop, pro);
+  }
+  static void print(int nop, process pro[]) {
+    process sum = new process();
+    System.out.println(" id at bt wt tat ");
+    for (int i = 0; i < nop; i++) {
+      System.out.println(" " + pro[i].id + " " + pro[i].at + " " + pro[i].bt + "	" + pro[i].wt + "	" +
+        pro[i].tat + "  ");
+      sum.wt += pro[i].wt;
+    }
+    System.out.println("Average wait time = " + sum.wt / nop);
+  }
+}
+ 
+
+//lifo optimal
+import java.util.*;
+
+public class PageReplacement {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ArrayList<Integer> pageFrames = new ArrayList<>();
+        int choice;
+
+        do {
+            System.out.println("Select a page replacement algorithm:");
+            System.out.println("1. Last In First Out (LIFO)");
+            System.out.println("2. Optimal");
+            System.out.println("3. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    LIFO(pageFrames);
+                    break;
+                case 2:
+                    Optimal(pageFrames);
+                    break;
+                case 3:
+                    System.out.println("Exiting...");
+                    break;
+                default:
+                    System.out.println("Invalid choice! Please enter again.");
+                    break;
+            }
+        } while (choice != 3);
+        scanner.close();
+    }
+
+    public static void LIFO(ArrayList<Integer> pageFrames) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the number of page frames: ");
+        int capacity = scanner.nextInt();
+        int pageFaults = 0;
+
+        Stack<Integer> stack = new Stack<>();
+        System.out.print("Enter the sequence of page references (separated by spaces): ");
+        String[] pageReferences = scanner.next().split(" ");
+
+        for (String pageRef : pageReferences) {
+            int page = Integer.parseInt(pageRef);
+
+            if (!pageFrames.contains(page)) {
+                pageFaults++;
+                if (pageFrames.size() == capacity) {
+                    int removedPage = stack.pop();
+                    pageFrames.remove(Integer.valueOf(removedPage));
+                }
+                pageFrames.add(page);
+                stack.push(page);
+            }
+        }
+
+        System.out.println("Page Faults using LIFO: " + pageFaults);
+        scanner.close();
+    }
+
+    public static void Optimal(ArrayList<Integer> pageFrames) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the number of page frames: ");
+        int capacity = scanner.nextInt();
+        int pageFaults = 0;
+
+        System.out.print("Enter the sequence of page references (separated by spaces): ");
+        String[] pageReferences = scanner.next().split(" ");
+
+        ArrayList<Integer> pages = new ArrayList<>();
+        for (String pageRef : pageReferences) {
+            int page = Integer.parseInt(pageRef);
+            pages.add(page);
+        }
+
+        for (int i = 0; i < pages.size(); i++) {
+            int page = pages.get(i);
+
+            if (!pageFrames.contains(page)) {
+                pageFaults++;
+                if (pageFrames.size() == capacity) {
+                    int farthest = i;
+                    int farthestPage = -1;
+                    for (int j = 0; j < pageFrames.size(); j++) {
+                        int nextPage = pageFrames.get(j);
+                        int index = pages.subList(i, pages.size()).indexOf(nextPage);
+                        if (index == -1) {
+                            farthestPage = nextPage;
+                            break;
+                        }
+                        if (index > farthest) {
+                            farthest = index;
+                            farthestPage = nextPage;
+                        }
+                    }
+                    pageFrames.remove(Integer.valueOf(farthestPage));
+                }
+                if (pageFrames.size() < capacity) {
+                    pageFrames.add(page);
+                }
+            }
+        }
+
+        System.out.println("Page Faults using Optimal: " + pageFaults);
+        scanner.close();
+    }
+}
