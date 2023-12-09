@@ -1,0 +1,947 @@
+//
+
+import java.util.Scanner;
+
+abstract public class Shape {
+    protected double area;
+
+    public void getdata() {
+
+    }
+
+    abstract public void Compute_area();
+
+    public void display() {
+
+    }
+}
+
+import java.util.Scanner;
+
+public class Triangle extends Shape {
+
+    public double base, height;
+
+    public void getdata() {
+        System.out.println("\nArea of triangle");
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter base:");
+        base = input.nextDouble();
+        System.out.println("Enter height:");
+        height = input.nextDouble();
+    }
+
+    public void Compute_area() {
+        area = 0.5 * base * height;
+    }
+
+    public void display() {
+        System.out.println("Area of triangle is:" + area);
+        System.out.println("----------------------");
+    }
+}
+
+import java.util.Scanner;
+
+public class Circle extends Shape {
+
+    public double radius;
+
+    public void getdata() {
+        System.out.println("\nArea of circle");
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter radius:");
+        radius = input.nextDouble();
+    }
+
+    public void Compute_area() {
+        area = 3.142 * radius * radius;
+    }
+
+    public void display() {
+        System.out.println("Area of circle is: " + area);
+        System.out.println("----------------------");
+    }
+}
+
+import java.util.Scanner;
+
+public class Rectangle extends Shape {
+
+    public double length, breadth;
+
+    public void getdata() {
+        System.out.println("\nArea of rectangle");
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter length:");
+        length = input.nextDouble();
+        System.out.println("Enter breadth:");
+        breadth = input.nextDouble();
+    }
+
+    public void Compute_area() {
+        area = length * breadth;
+    }
+
+    public void display() {
+        System.out.println("Area of rectangle is: " + area);
+        System.out.println("----------------------");
+    }
+}
+
+import java.util.Scanner;
+
+public class CalculateArea {
+    public static void main(String[] args) {
+
+        int ch;
+        do {
+            System.out.println("1. Area of triangle.");
+            System.out.println("2. Area of rectangle.");
+            System.out.println("3. Area of circle.");
+            System.out.println("4. Exit.");
+            System.out.println("Enter your choice:");
+            Scanner input = new Scanner(System.in);
+            ch = input.nextInt();
+
+            switch (ch) {
+                case 1:
+                    Shape t = new Triangle();
+                    t.getdata();
+                    t.Compute_area();
+                    t.display();
+                    break;
+
+                case 2:
+                    Shape r = new Rectangle();
+                    r.getdata();
+                    r.Compute_area();
+                    r.display();
+                    break;
+
+                case 3:
+                    Shape c = new Circle();
+                    c.getdata();
+                    c.Compute_area();
+                    c.display();
+                    break;
+            }
+
+        } while (ch != 4);
+
+    }
+}
+
+
+import java.util.*;
+public class Matrix{
+    private int r,c;
+    private int mat[][] = new int [50][50];
+    
+    public void getdata()
+    {
+    	Scanner sc = new Scanner(System.in);
+    	System.out.println("Enter Row : ");
+    	r = sc.nextInt();
+    	System.out.println("Enter Column : ");
+    	c = sc.nextInt();
+    	System.out.println("Enter Elements  : ");
+    	for(int i= 0; i<r; i++)
+    	{
+    		for(int j = 0; j<c; j++)
+    		{
+    			mat[i][j] = sc.nextInt();
+    		}
+    	}
+    }
+    
+    public void Addition(Matrix x , Matrix y)
+    { 
+     if((x.r == y.r) && (x.c == y.c) )
+      { 
+       this.r = x.r;
+       this.c = x.c;
+       for(int i =0; i<r; i++)
+       {
+    	   for(int j =0; j<c; j++)
+    	   {
+    		  this.mat[i][j] =  x.mat[i][j] + y.mat[i][j];
+    	   }
+       }
+       System.out.println();
+       System.out.println("Addition iS : ");
+    	
+      }
+    else{
+      System.out.println("Addition not Possible because order is not same");
+    }
+    }
+
+
+    public void Substraction(Matrix x , Matrix y)
+    { 
+     if((x.r == y.r) && (x.c == y.c) )
+      { 
+       this.r = x.r;
+       this.c = x.c;
+       for(int i =0; i<r; i++)
+       {
+    	   for(int j =0; j<c; j++)
+    	   {
+    		  this.mat[i][j] =  x.mat[i][j] - y.mat[i][j];
+    	   }
+       }
+       System.out.println();
+       System.out.println("Subtraction iS : ");
+    	
+      }
+    else{
+      System.out.println("Subtraction is not Possible because order is not same");
+    }
+    }
+
+  
+
+    
+    
+    public void multiplication(Matrix x , Matrix y)
+    {  
+        
+      if(x.c == y.r)
+      {
+        this.r =x.r;
+        this.c = y.c;
+        int row2 = y.r;
+       
+        for(int i =0; i<r; i++)
+        {
+     	   for(int j =0; j<c; j++)
+     	   { 
+     		  for(int k =0 ; k<row2; k++)
+     		  {
+     			  int p = x.mat[i][k]*y.mat[k][j];
+                  mat[i][j] = mat[i][j]+p;
+          }
+     	   }
+        }
+        System.out.println();
+        System.out.println("Multiplication iS : ");
+      }
+      
+      else{
+        System.out.println("Multiplication is Not possible !! ");
+      }
+        
+       
+     	
+    }
+
+    public void transpose(Matrix x)
+    {
+      this.r = x.c;
+      this.c= x.r;
+    
+        for(int i =0; i<r; i++)
+        {
+     	   for(int j =0; j<c; j++)
+     	   { 
+     		   mat[i][j] = x.mat[j][i];
+     	   }
+        }
+        System.out.println();
+        System.out.println("Transpose iS : ");
+     
+
+
+    }
+    
+    
+    public void display()
+    {   
+    	for(int i= 0; i<r; i++)
+    	{
+    		for(int j = 0; j<c; j++)
+    		{
+    			
+    			System.out.print(mat[i][j]+ " ");
+    		}
+    		System.out.println();
+    	}
+    	System.out.println();
+    }
+    
+}
+
+import java.util.Scanner;
+public class Matrix_op {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Matrix m1 = new Matrix();
+		Matrix m2 = new Matrix();
+		Matrix m3 = new Matrix();
+		Scanner sc = new Scanner(System.in);
+		int choice;
+		System.out.println("Enter Your First Matrix ! ");
+		m1.getdata();
+		m1.display();
+		System.out.println("Enter Your Second Matrix ! ");
+		m2.getdata();
+		m2.display();
+		do{
+			System.out.println("Enter 1 to perform addition of matrices : ");
+			System.out.println("Enter 2 to perform Substraction of matrices : ");
+			System.out.println("Enter 3 to perform Multiplication of matrices : ");
+			System.out.println("Enter 4 to perform Transpose of one of the matix : ");
+			System.out.println("Enter 5 to exit : ");
+			choice = sc.nextInt();
+
+			switch(choice){
+				case 1 :
+				 m3.Addition(m1, m2);
+				 m3.display();
+				 break;
+				case 2 :
+				  m3.Substraction(m1, m2);
+				  m3.display();
+				  break;
+				case 3:
+				  m3.multiplication(m1, m2);
+				  m3.display();
+				  break;
+				case 4:
+				System.out.println("Enter 1 for first matrix's transpose or 2 for other matrix's transpose : ");				
+				int ch = sc.nextInt();
+				if(ch == 1)
+				{   
+				 m3.transpose(m1);
+				 m3.display();
+				}
+				else
+				{
+					m3.transpose(m2);
+					m3.display();
+				}  
+
+			}
+			
+			
+
+		}while(choice != 5);
+	}
+
+}
+
+
+
+package practica;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class ArrayListOperations {
+
+    private ArrayList<Integer> numList = new ArrayList<>();
+    private ArrayList<Integer> evenList = new ArrayList<>();
+    private ArrayList<Integer> oddList = new ArrayList<>();
+    private ArrayList<Integer> primeList = new ArrayList<>();
+    private ArrayList<String> stringList = new ArrayList<>();
+    private Scanner sc = new Scanner(System.in);
+
+    public void addNumbers() {
+        System.out.println("How Many Numbers You Want To Enter: ");
+        int num = sc.nextInt();
+        int element;
+
+        for (int i = 0; i < num; i++) {
+            System.out.println("Enter Number: ");
+            element = sc.nextInt();
+            numList.add(element);
+        }
+    }
+
+    public void getEvenNumbers() {
+        for (int i = 0; i < numList.size(); i++) {
+            if (numList.get(i) % 2 == 0) {
+                evenList.add(numList.get(i));
+            } else {
+                oddList.add(numList.get(i));
+            }
+        }
+    }
+
+    public void getPrimeNumbers() {
+        int flag;
+
+        for (int i = 0; i < numList.size(); i++) {
+            flag = 0;
+
+            for (int j = 2; j <= Math.sqrt(numList.get(i)); j++) {
+                if (numList.get(i) % j == 0) {
+                    flag = 1;
+                    break;
+                }
+            }
+
+            if (flag == 0 && numList.get(i) != 1) {
+                primeList.add(numList.get(i));
+            }
+        }
+    }
+
+    public void display() {
+        System.out.println("Numbers list: " + numList);
+        System.out.println("Even Numbers list: " + evenList);
+        System.out.println("Odd Numbers list: " + oddList);
+        System.out.println("Prime Numbers list: " + primeList);
+    }
+
+    public void addStrings() {
+        System.out.println("How Many Strings You Want To Enter: ");
+        int num = sc.nextInt();
+        String inputString;
+
+        for (int i = 0; i < num; i++) {
+            System.out.println("Enter String: ");
+            inputString = sc.next();
+            stringList.add(inputString);
+        }
+    }
+
+    public void getPalindromeString() {
+        // TODO: Implement palindrome string logic
+    }
+
+    public static void main(String[] args) {
+        ArrayListOperations obj = new ArrayListOperations();
+        int ch;
+        Scanner sc = new Scanner(System.in);
+
+        do {
+            System.out.println("Enter 1 for Integer ");
+            System.out.println("Enter 2 for exit");
+            ch = sc.nextInt();
+
+            switch (ch) {
+                case 1:
+                    obj.addNumbers();
+                    obj.getEvenNumbers();
+                    obj.getPrimeNumbers();
+                    obj.display();
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unexpected value: " + ch);
+            }
+
+        } while (ch != 2);
+    }
+}
+
+
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class ExceptionHandling {
+    public static void main(String[] args) {
+        int num1, num2;
+        Scanner input = new Scanner(System.in);
+
+        try {
+            System.out.println("Enter num1: ");
+            num1 = input.nextInt();
+
+            System.out.println("Enter num2 (non-zero): ");
+            num2 = input.nextInt();
+
+            if (num2 == 0) {
+                throw new ArithmeticException("Division by zero is not possible");
+            }
+
+            int div = num1 / num2;
+            System.out.println("Division is: " + div);
+        } catch (InputMismatchException e) {
+            System.out.println("InputMismatchException: Enter integer type input");
+        } catch (ArithmeticException e) {
+            System.out.println("ArithmeticException: " + e.getMessage());
+        } finally {
+            // Close the Scanner in the finally block
+            input.close();
+        }
+    }
+}
+
+
+import java.util.Scanner;
+
+public class Employee {
+    String name, address, mail_id, DOB;
+    int id;
+    long mobile_no;
+
+    public void getdata() {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter name, DOB, address, id, mail_id, mobile_no");
+        name = input.next();
+        DOB = input.next();
+        address = input.next();
+        id = input.nextInt();
+        mail_id = input.next();
+        mobile_no = input.nextLong();
+    }
+
+    public void display() {
+        System.out.println("Name: " + name + "\nDate of Birth: " + DOB + "\nAddress: " + address +
+                "\nId: " + id + "\nMailId: " + mail_id + "\nMobile no: " + mobile_no);
+    }
+}
+
+class Programmer extends Employee {
+    double basic_pay;
+
+    public void accept() {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter basic pay: ");
+        basic_pay = input.nextFloat();
+    }
+
+    float DA, HRA, PF, SCF;
+    float gross_salary, net_salary;
+
+    public void calculate() {
+        DA = (float) basic_pay * 97 / 100;
+        HRA = (float) basic_pay * 10 / 100;
+        PF = (float) basic_pay * 12 / 100;
+        SCF = (float) basic_pay * 1 / 1000;
+
+        gross_salary = (float) basic_pay + DA + HRA;
+        net_salary = gross_salary - PF - SCF;
+    }
+
+    public void output() {
+        System.out.println("DA: " + DA + "\nHRA:" + HRA + "\nPF: " + PF + "\nSCF:" + SCF);
+        System.out.println("Gross Salary: " + gross_salary + "\nNet salary: " + net_salary + "\n");
+    }
+}
+
+class Team_Leader extends Employee {
+    double basic_pay;
+
+    public void accept() {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter basic pay: ");
+        basic_pay = input.nextFloat();
+    }
+
+    float DA, HRA, PF, SCF;
+    float gross_salary, net_salary;
+
+    public void calculate() {
+        DA = (float) basic_pay * 97 / 100;
+        HRA = (float) basic_pay * 10 / 100;
+        PF = (float) basic_pay * 12 / 100;
+        SCF = (float) basic_pay * 1 / 1000;
+
+        gross_salary = (float) basic_pay + DA + HRA;
+        net_salary = gross_salary - PF - SCF;
+    }
+
+    public void output() {
+        System.out.println("DA: " + DA + "\nHRA:" + HRA + "\nPF: " + PF + "\nSCF:" + SCF);
+        System.out.println("Gross Salary: " + gross_salary + "\nNet salary: " + net_salary + "\n");
+    }
+}
+
+class Assistant_Manager extends Employee {
+    double basic_pay;
+
+    public void accept() {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter basic pay: ");
+        basic_pay = input.nextFloat();
+    }
+
+    float DA, HRA, PF, SCF;
+    float gross_salary, net_salary;
+
+    public void calculate() {
+        DA = (float) basic_pay * 97 / 100;
+        HRA = (float) basic_pay * 10 / 100;
+        PF = (float) basic_pay * 12 / 100;
+        SCF = (float) basic_pay * 1 / 1000;
+
+        gross_salary = (float) basic_pay + DA + HRA;
+        net_salary = gross_salary - PF - SCF;
+    }
+
+    public void output() {
+        System.out.println("DA: " + DA + "\nHRA:" + HRA + "\nPF: " + PF + "\nSCF:" + SCF);
+        System.out.println("Gross Salary: " + gross_salary + "\nNet salary: " + net_salary + "\n");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        int ch;
+        Scanner sc = new Scanner(System.in);
+
+        do {
+            System.out.println("1. Programmer Salary");
+            System.out.println("2. Team Lead Salary");
+            System.out.println("3. Assistant Manager Salary");
+            System.out.println("4. Project Manager Salary");
+            System.out.println("5. Exit");
+            System.out.println("Enter your choice:");
+
+            ch = sc.nextInt();
+
+            switch (ch) {
+                case 1:
+                    Programmer p = new Programmer();
+                    System.out.println("Enter Employee details: ");
+                    p.getdata();
+                    p.display();
+                    p.accept();
+                    p.calculate();
+                    p.output();
+                    break;
+
+                case 2:
+                    Team_Leader t = new Team_Leader();
+                    System.out.println("Enter Employee details: ");
+                    t.getdata();
+                    t.display();
+                    t.accept();
+                    t.calculate();
+                    t.output();
+                    break;
+
+                case 3:
+                    Assistant_Manager a = new Assistant_Manager();
+                    System.out.println("Enter Employee details: ");
+                    a.getdata();
+                    a.display();
+
+
+
+#include <iostream>
+using namespace std;
+
+class feet_inch;
+
+class meter_centimeter {
+    int mt, cm;
+
+public:
+    meter_centimeter() {
+        mt = 0;
+        cm = 0;
+    }
+
+    void display();
+    meter_centimeter(int x, int y);
+    friend meter_centimeter add(meter_centimeter, feet_inch);
+    friend meter_centimeter sub(meter_centimeter, feet_inch);
+    friend feet_inch add(feet_inch, meter_centimeter);
+};
+
+class feet_inch {
+    int ft, inch;
+
+public:
+    feet_inch() {
+        ft = 0;
+        inch = 0;
+    }
+
+    void output();
+    feet_inch(int a, int b);
+    friend meter_centimeter add(meter_centimeter, feet_inch);
+    friend meter_centimeter sub(meter_centimeter, feet_inch);
+    friend feet_inch add(feet_inch, meter_centimeter);
+};
+
+meter_centimeter::meter_centimeter(int x, int y) {
+    mt = x;
+    cm = y;
+}
+
+void meter_centimeter::display() {
+    cout << "Value of meter: " << mt << endl;
+    cout << "Value of centimeter: " << cm << endl;
+}
+
+feet_inch::feet_inch(int a, int b) {
+    ft = a;
+    inch = b;
+}
+
+void feet_inch::output() {
+    cout << "Value of feet: " << ft << endl;
+    cout << "Value of inch: " << inch << endl;
+}
+
+meter_centimeter add(meter_centimeter m, feet_inch f) {
+    meter_centimeter temp;
+    float cal = m.mt * 100 + m.cm + f.ft * 0.3048 + f.inch * 2.54;
+    int result = cal;
+    temp.mt = result / 100;
+    temp.cm = result % 100;
+    return temp;
+}
+
+feet_inch add(feet_inch f, meter_centimeter m) {
+    feet_inch temp;
+    float cal = m.mt * 39.37 + m.cm * 0.393701 + f.ft * 12 + f.inch;
+    int result = cal;
+    temp.ft = result / 12;
+    temp.inch = result % 12;
+    return temp;
+}
+
+meter_centimeter sub(meter_centimeter m, feet_inch f) {
+    meter_centimeter temp1;
+    float cal = (m.mt * 100 + m.cm) - (f.ft * 0.3048 + f.inch * 2.54);
+    int result = cal;
+    temp1.mt = result / 100;
+    temp1.cm = result % 100;
+    return temp1;
+}
+
+int main() {
+    int m, c, f, i, choice;
+    cout << "Enter value of meter:" << endl;
+    cin >> m;
+    cout << "Enter the value of centimeter: " << endl;
+    cin >> c;
+    cout << "Enter value of feet: " << endl;
+    cin >> f;
+    cout << "Enter the value of inch: " << endl;
+    cin >> i;
+
+    meter_centimeter m1(m, c), m2, m3;
+    feet_inch f1(f, i), f2;
+
+    m1.display();
+    f1.output();
+
+    m2 = add(m1, f1);
+    f2 = add(f1, m1);
+    m3 = sub(m1, f1);
+
+    cout << "1. add in meter_centimeter" << endl;
+    cout << "2. add in feet_inch" << endl;
+    cout << "3. sub in meter_centimeter" << endl;
+    cout << "Enter your choice: ";
+    cin >> choice;
+
+    switch (choice) {
+    case 1:
+        m2.display();
+        break;
+    case 2:
+        f2.output();
+        break;
+    case 3:
+        m3.display();
+        break;
+    }
+
+    return 0;
+}
+
+
+import java.util.Scanner;
+
+public class Complex {
+    public int real, img;
+
+    public Complex() {
+        real = 0;
+        img = 0;
+    }
+
+    public Complex(int real, int img) {
+        this.real = real;
+        this.img = img;
+    }
+
+    public void add(Complex x, Complex y) {
+        real = x.real + y.real;
+        img = x.img + y.img;
+        System.out.println("Addition of two Complex numbers: " + real + " + " + img + "i");
+    }
+
+    public void sub(Complex x, Complex y) {
+        real = x.real - y.real;
+        img = x.img - y.img;
+        System.out.println("Subtraction of two Complex numbers: " + real + " + " + img + "i");
+    }
+
+    public void mul(Complex x, Complex y) {
+        real = (x.real * y.real - x.img * y.img);
+        img = (x.real * y.img + x.img * y.real);
+        System.out.println("Multiplication of two Complex numbers: " + real + " + " + img + "i");
+    }
+
+    public void div(Complex x, Complex y) {
+        real = (x.real * y.real + x.img * y.img) / (y.real * y.real + y.img * y.img);
+        img = (x.img * y.real - x.real * y.img) / (y.real * y.real + y.img * y.img);
+        System.out.println("Division of two Complex numbers: " + real + " + " + img + "i");
+    }
+}
+
+public class ComplexOp {
+    public static void main(String[] args) {
+        int a, b, c, d;
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter first complex number:");
+        a = sc.nextInt();
+        b = sc.nextInt();
+        System.out.println("Enter second Complex number:");
+        c = sc.nextInt();
+        d = sc.nextInt();
+
+        Complex c1 = new Complex(a, b);
+        Complex c2 = new Complex(c, d);
+        Complex c3 = new Complex();
+        c3.add(c1, c2);
+        Complex c4 = new Complex();
+        c4.sub(c1, c2);
+        Complex c5 = new Complex();
+        c5.mul(c1, c2);
+        Complex c6 = new Complex();
+        c6.div(c1, c2); // Corrected from c3 to c6
+    }
+}
+
+
+
+
+public class Bag {
+    private int wt;
+    private String col;
+    private static int total_object = 0;
+    private static int total_weight = 0;
+
+    public Bag() {
+        col = "red";
+        wt = 10;
+        total_object += 1;
+        total_weight += wt;
+    }
+
+    public Bag(String col, int wt) {
+        this.col = col;
+        this.wt = wt;
+        total_object += 1;
+        total_weight += wt;
+    }
+
+    public Bag(String col) {
+        this.col = col;
+        wt = 10;
+        total_object += 1;
+        total_weight += wt;
+    }
+
+    public Bag(int wt) {
+        this.wt = wt;
+        col = "red";
+        total_object += 1;
+        total_weight += wt;
+    }
+
+    public void display(int i) {
+        i += 1;
+        System.out.println(i + " " + col + " " + wt);
+    }
+
+    public static void accept() {
+        System.out.println("Total Objects;");
+        System.out.println("Total Weight:");
+    }
+
+    public static void output() {
+        System.out.println("total_object: " + total_object + "\n" + "total_weight: " + total_weight);
+    }
+}
+
+public class BagOp {
+    public static void main(String[] args) {
+        Bag obj[] = new Bag[10];
+        int ch1, ch2;
+        int w;
+        String c;
+        int n = 0;
+
+        Scanner in = new Scanner(System.in);
+
+        do {
+            System.out.println("1:Add:");
+            System.out.println("2:Display:");
+            System.out.println("3:Exit");
+            System.out.println("Enter the choice:");
+            ch1 = in.nextInt();
+
+            switch (ch1) {
+                case 1:
+                    do {
+                        System.out.println("1: Both Default");
+                        System.out.println("2: Both from user");
+                        System.out.println("3: Value of colour from user");
+                        System.out.println("4: Value of weight from user");
+                        System.out.println("5: Exit");
+                        System.out.println("Enter the Choice:");
+                        ch2 = in.nextInt();
+
+                        switch (ch2) {
+                            case 1:
+                                obj[n] = new Bag();
+                                n += 1;
+                                System.out.println("Ball is added");
+                                break;
+                            case 2:
+                                System.out.println("Enter Weight of ball:");
+                                w = in.nextInt();
+                                System.out.println("Enter Colour of ball:");
+                                c = in.next();
+                                obj[n] = new Bag(c, w);
+                                n += 1;
+                                System.out.println("Ball is added");
+                                break;
+                            case 3:
+                                System.out.println("Enter Colour of ball:");
+                                c = in.next();
+                                obj[n] = new Bag(c);
+                                n += 1;
+                                System.out.println("Ball is added");
+                                break;
+                            case 4:
+                                System.out.println("Enter Weight of ball:");
+                                w = in.nextInt();
+                                obj[n] = new Bag(w);
+                                n += 1;
+                                System.out.println("Ball is added");
+                                break;
+                            case 5:
+                                System.out.println("Exit");
+                                break;
+                        }
+
+                    } while (ch2 != 5);
+                    break;
+                case 2:
+                    for (int i = 0; i < n; i++) {
+                        obj[i].display(i);
+                    }
+                    Bag.output();
+                    break;
+                case 3:
+                    System.out.println("Exit");
+                    break;
+            }
+        } while (ch1 != 3);
+    }
+}
+
+
+
