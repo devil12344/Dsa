@@ -1,0 +1,2235 @@
+'''
+
+
+Experiment No. 1 : In a second year computer engineering class, group A students play cricket, group B students play
+                   badminton and group C students play football.
+                   Write a python program using functions to compute following:
+                   a) List of students who play both cricket and badminton.
+                   b) List of students who play either cricket or badminton but not both.
+                   c) Number of students who play neither cricket nor badminton.
+                   d) Number of students who play cricket and football but not badminton.
+(NOTE : While realising the group, duplicate entries should be avoided. Do not use SET built-in functions)
+'''
+
+
+# Function for removing duplicate entries from the group
+
+def removeDuplicate(d):
+    lst=[]
+    for i in d:
+        if i not in lst:
+            lst.append(i)
+    return lst
+
+#<---------------------------------------------------------------------------------------->
+
+# Function for finding intersection between two sets (A&B)
+
+def intersection(lst1,lst2):
+    lst3=[]
+    for val in lst1:
+        if val in lst2:
+            lst3.append(val)
+    return lst3
+
+#<------------------------------------------------------------------------------------------>
+
+# Function for finding union of two sets (A|B)
+
+def union(lst1,lst2):
+    lst3=lst1.copy()
+    for val in lst2:
+        if val not in lst3:
+            lst3.append(val)
+    return lst3
+
+#<------------------------------------------------------------------------------------------->
+
+# Function for finding difference between two sets (A-B)
+
+def diff(lst1,lst2):
+    lst3=[]
+    for val in lst1:
+        if val not in lst2:
+            lst3.append(val)
+    return lst3
+
+#<---------------------------------------------------------------------------------------------->
+
+# Function for finding symmetric difference of two sets (A^B)
+
+def sym_diff(lst1,lst2):
+    lst3=[]
+    D1=diff(lst1,lst2)
+    print("Difference between Cricket and Badminton (C-B) is : ", D1)
+    D2=diff(lst2,lst1)
+    print("Difference between Badminton and Cricket (B-C) is : ", D2)
+    lst3=union(D1,D2)
+    return lst3
+
+#<------------------------------------------------------------------------------------------------>
+
+# Functon for finding List of students who play both cricket and badminton
+
+def CB(lst1,lst2):
+    lst3=intersection(lst1,lst2)
+    print("\n\nList of students who play both cricket and badminton is : ", lst3)
+    return len(lst3)
+
+#<------------------------------------------------------------------------------------------------>
+
+# Function for finding List of students who play either cricket or badminton but not both
+
+def eCeB(lst1,lst2):
+    lst3=sym_diff(lst1,lst2)
+    print("\nList of students who play either cricket or badminton but not both is : ",lst3)
+    return len(lst3)
+
+#<-------------------------------------------------------------------------------------------------->
+
+# Function for finding Number of students who play neither cricket nor badminton
+
+def nCnB(lst1,lst2,lst3):
+    lst4=diff(lst1,union(lst2,lst3))
+    print("\n\nList of students who play neither cricket nor badminton is : ",lst4)
+    return len(lst4)
+
+#<--------------------------------------------------------------------------------------------------->
+
+# Function for finding Number of students who play cricket and football but not badminton
+
+def CBnF(lst1,lst2,lst3):
+    lst4=diff(intersection(lst1,lst2),lst3)
+    print("\n\nList of students who play cricket and football but not badminton is : ",lst4)
+    return len(lst4)
+
+#<----------------------------------------------------------------------------------------------------->
+
+# Main function
+
+# Creating an empty list for SE COMP
+SEComp = []
+n = int(input("\nEnter number of students in SE COMP: "))
+print("Enter the names of",n,"students (Please press ENTER after entering each students name) :")
+for i in range(0, n):
+    ele = input()
+    SEComp.append(ele)  # adding the element
+print("Original list of students in SEComp : " + str(SEComp))
+
+#<------------------------------------------------------------------------------------------------------->
+
+
+# Creating an empty list for Cricket
+Cricket = []
+n = int(input("\n\nEnter number of students who play cricket : "))
+print("Enter the names of",n,"students who play cricket (Please press ENTER after entering each students name) :")
+for i in range(0, n):
+    ele = input()
+    Cricket.append(ele)  # adding the element
+print("Original list of students playing cricket is :" +str(Cricket))
+Cricket=removeDuplicate(Cricket)
+print("The list of students playing cricket after removing duplicates : " +str(Cricket))
+
+#<------------------------------------------------------------------------------------------------------->
+
+
+# Creating an empty list for Football
+Football = []
+n = int(input("\n\nEnter number of students who play football : "))
+print("Enter the name of",n,"students who play football (Please press ENTER after entering each students name) :")
+for i in range(0, n):
+    ele = input()
+    Football.append(ele)  # adding the element
+print("Original list of students playing football :" +str(Football))
+Football=removeDuplicate(Football)
+print("The list of students playing football after removing duplicates : " +str(Football))
+
+#<-------------------------------------------------------------------------------------------------------->
+
+
+# Creating an empty list for Badminton
+Badminton = []
+n = int(input("\n\nEnter number of students who play badminton : "))
+print("Enter the name of",n,"students who play badminton (Please press ENTER after entering each students name) :")
+for i in range(0, n):
+    ele = input()
+    Badminton.append(ele)  # adding the element
+print("Original list of students playing badminton :" +str(Badminton))
+Badminton=removeDuplicate(Badminton)
+print("The list of students playing badminton after removing duplicates : " +str(Badminton))
+
+#<---------------------------------------------------------------------------------------------------------->
+
+flag=1
+while flag==1:
+    print("\n\n--------------------MENU--------------------\n")
+    print("1. List of students who play both cricket and badminton")
+    print("2. List of students who play either cricket or badminton but not both")
+    print("3. List of students who play neither cricket nor badminton")
+    print("4. Number of students who play cricket and football but not badminton")
+    print("5. Exit\n")
+    ch=int(input("Enter your Choice (from 1 to 5) :"))
+
+    if ch==1:
+        print("Number of students who play both cricket and badminton : ", CB(Cricket,Badminton))
+        a = input("\n\nDo you want to continue (yes/no) :")
+        if a == "yes":
+            flag = 1
+        else:
+            flag = 0
+            print("Thanks for using this program!")
+
+    elif ch==2:
+        print("Number of students who play either cricket or badminton but not both : ", eCeB(Cricket, Badminton))
+        a = input("\n\nDo you want to continue (yes/no) :")
+        if a == "yes":
+            flag = 1
+        else:
+            flag = 0
+            print("Thanks for using this program!")
+
+    elif ch==3:
+        print("Number of students who play neither cricket nor badminton : ", nCnB(SEComp,Cricket,Badminton))
+        a = input("\n\nDo you want to continue (yes/no) :")
+        if a == "yes":
+            flag = 1
+        else:
+            flag = 0
+            print("Thanks for using this program!")
+
+    elif ch==4:
+        print("Number of students who play cricket and football but not badminton : ", CBnF(Cricket,Football,Badminton))
+        a = input("\n\nDo you want to continue (yes/no) :")
+        if a == "yes":
+            flag = 1
+        else:
+            flag = 0
+            print("Thanks for using this program!")
+
+    elif ch==5:
+        flag=0
+        print("Thanks for using this program!")
+
+    else:
+        print("!!Wrong Choice!! ")
+        a=input("\n\nDo you want to continue (yes/no) :")
+        if a=="yes":
+            flag=1
+        else:
+            flag=0
+            print("Thanks for using this program!")
+
+#<---------------------------------------------END OF PROGRAM--------------------------------------->
+
+
+
+'''
+
+Experiment Number 2 : Write a python program to store marks stored in subject "Fundamentals of Data Structure" by
+                         N students in the class. Write functions to compute following:
+                         1. The average score of the class.
+                         2. Highest score and lowest score of the class.
+                         3. Count of students who were absent for the test.
+                         4. Display mark with highest frequency.
+'''
+
+
+# Function for average score of the class
+
+def average(listofmarks):
+    sum=0
+    count=0
+    for i in range(len(listofmarks)):
+        if listofmarks[i]!=-999:
+            sum+=listofmarks[i]
+            count+=1
+    avg=sum/count
+    print("Total Marks : ", sum)
+    print("Average Marks : {:.2f}".format(avg))
+
+#<----------------------------------------------------------------------------------------------------->
+
+# Function for Highest score in the test for the class
+
+def Maximum(listofmarks):
+    for i in range(len(listofmarks)):
+        if listofmarks[i]!=-999:
+            Max=listofmarks[0]
+            break
+    for i in range(1,len(listofmarks)):
+        if listofmarks[i]>Max:
+            Max=listofmarks[i]
+    return(Max)
+
+#<------------------------------------------------------------------------------------------------------>
+
+# Function for Lowest score in the test for the class
+
+def Minimum(listofmarks):
+    for i in range(len(listofmarks)):
+        if listofmarks[i]!=-999:
+            Min=listofmarks[0]
+            break
+    for i in range(1,len(listofmarks)):
+        if listofmarks[i]<Min:
+            Min=listofmarks[i]
+    return(Min)
+
+#<------------------------------------------------------------------------------------------------------->
+
+# Function for counting the number of students absent for the test
+
+def absentcount(listofmarks):
+    count=0
+    for i in range(len(listofmarks)):
+        if listofmarks[i]==-999:
+            count+=1
+    return(count)
+
+#<------------------------------------------------------------------------------------------------------->
+
+# Function for displaying marks with highest frequency
+def maxFrequency(listofmarks):
+    i=0
+    Max=0
+    print("Marks  |  Frequency")
+    for j in listofmarks:
+        if (listofmarks.index(j)==i):
+            print(j,"    |  ",listofmarks.count(j))
+            if listofmarks.count(j)>Max:
+                Max=listofmarks.count(j)
+                mark=j
+        i=i+1
+    return(mark,Max)
+
+
+#<------------------------------------------------------------------------------------------------------->
+
+# Main function
+
+marksinFDS=[]
+numberofstudents=int(input("Enter total number of students : "))
+for i in range(numberofstudents):
+    marks=int(input("Enter marks of student "+str(i+1)+" : "))
+    marksinFDS.append(marks)
+
+flag=1
+while flag==1:
+    print("\n\n--------------------MENU--------------------\n")
+    print("1. Total and Average Marks of the Class")
+    print("2. Highest and Lowest Marks in the Class")
+    print("3. Number of Students absent for the test")
+    print("4. Marks with Highest Frequency")
+    print("5. Exit\n")
+    ch=int(input("Enter your Choice (from 1 to 5) :"))
+
+    if ch==1:
+        average(marksinFDS)
+        a = input("Do you want to continue (yes/no) :")
+        if a == "yes":
+            flag = 1
+        else:
+            flag = 0
+            print("Thanks for using this program!")
+
+    elif ch==2:
+        print("Highest Score in Class : ", Maximum(marksinFDS))
+        print("Lowest Score in Class : ", Minimum(marksinFDS))
+        a = input("Do you want to continue (yes/no) :")
+        if a == "yes":
+            flag = 1
+        else:
+            flag = 0
+            print("Thanks for using this program!")
+
+    elif ch==3:
+        print("Number of Students absent in the test : ", absentcount(marksinFDS))
+        a = input("Do you want to continue (yes/no) :")
+        if a == "yes":
+            flag = 1
+        else:
+            flag = 0
+            print("Thanks for using this program!")
+
+    elif ch==4:
+        mark,fr = maxFrequency(marksinFDS)
+        print("Highest frequency is of marks {0} that is {1} ".format(mark,fr))
+        a = input("Do you want to continue (yes/no) :")
+        if a == "yes":
+            flag = 1
+        else:
+            flag = 0
+            print("Thanks for using this program!")
+
+    elif ch==5:
+        flag=0
+        print("Thanks for using this program!")
+
+    else:
+        print("!!Wrong Choice!! ")
+        a=input("Do you want to continue (yes/no) :")
+        if a=="yes":
+            flag=1
+        else:
+            flag=0
+            print("Thanks for using this program!")
+
+#<---------------------------------------------END OF PROGRAM--------------------------------------->
+
+'''
+
+Experiment No. 7 : Write a python program for MAGIC SQUARE.
+                   A magic square is an n*n matrix of the integers 1 to (n^2) such that the sum of each row,
+                   column and diagonalis the same.
+                   The figure given below is an example of the magic square for case n=5. In this example
+                   the common sum is 65.
+
+                   9  |   3  |  22  |  16  |  15  |
+                   2  |  21  |  20  |  14  |   8  |
+                  25  |  19  |  13  |   7  |   1  |
+                  18  |  12  |   6  |   5  |  24  |
+                  11  |  10  |   4  |  23  |  17  |
+
+Conditions for placing the values in the matrix in appropriate manner (CIRCULAR ARRAY) :
+
+   1. The position of next number is calculated by decrementing row number of previous number by 1, and incrementing
+      the column number of previous number by 1. At any time, if the calculated row position becomes -1, it will wrap
+      around to n-1. Similarly, if the calculated column position becomes n, it will wrap around to 0.
+
+   2. If the magic square already contains a number at the calculated position, calculated column position will be
+      decremented by 2, and calculated row position will be incremented by 1.
+
+   3. If the calculated row position is -1 & calculated column position is n, the new position would be: (0, n-2).
+'''
+
+
+# A function to generate odd
+# sized magic squares
+
+def generate_Magic_Square(size):
+    magicSquare=[[0 for x in range(size)] for y in range(size)]
+
+    # Initializing first position of matrix
+    i=size/2
+    j=size-1
+
+    # Fill the magic square by placing values at appropriate position
+    num=1
+    while num<=(size*size):
+        if i==-1 and j==size:  # 3rd Condition
+            j=size-2
+            i=0
+        else:
+            # next number goes out of right side of square
+            if j==size:
+                j=0
+
+            # next number goes out of upper side
+            if i<0:
+                i=size-1
+
+        if magicSquare[int(i)][int(j)]:  # 2nd condition
+            j=j-2
+            i=i+1
+            continue
+        else:
+            magicSquare[int(i)][int(j)]=num
+            num=num+1
+
+        j=j+1
+        i=i-1  # 1st condition
+
+    # Printing of magic square
+    sum=size*(size*size+1)/2
+    print("Sum of each row or column is : ",sum)
+    print("Magic Square of size",size,"*",size,"is : \n")
+
+    for i in range(0,size):
+        for j in range(0,size):
+            print(' %2d ' % (magicSquare[i][j]),end=' | ')
+
+            # To display magic square in matrix form
+            if j==size-1:
+                print()
+
+#<------------------------------------------------------------------------------------------------->
+
+#Main function
+
+flag=1
+while flag==1:
+    n=int(input("\nEnter the size of the MAGIC SQUARE : "))
+    if n%2==0:
+        s=int(input("Please enter an ODD Number (for example - 3,5,7,9,....) : "))
+        generate_Magic_Square(s)
+    else:
+        generate_Magic_Square(n)
+    a=input("\nDo you want to print Magic Square of some other size (yes/no) : ")
+    if a=='yes':
+        flag=1
+    else:
+        flag=0
+        print("\nThanks for using this program!")
+
+#<------------------------------------------ END OF PROGRAM ----------------------------------------->
+
+
+'''
+This program is created by ATHARVA PAWAR
+
+Experiment No. 9 : Write a Python Program to compute following computation on matrices :
+                   a)Addition of two matrices
+                   b)Subtraction of two matrices
+                   c)Multiplication of two matrices
+                   d)Transpose of a matix
+'''
+
+import numpy
+
+# initializing matrices
+x = numpy.array([[1, 2], [4, 5]])
+y = numpy.array([[7, 8], [9, 10]])
+
+# using add() to add matrices
+print("The element wise addition of matrix is : ")
+print(numpy.add(x, y))
+
+# using subtract() to subtract matrices
+print("The element wise subtraction of matrix is : ")
+print(numpy.subtract(x, y))
+
+# using dot() to multiply matrices
+print ("The product of matrices is : ")
+print (numpy.dot(x,y))
+
+
+# using "T" to transpose the matrix
+print("The transpose of given matrix is : ")
+print(x.T)
+
+
+# Created by ATHARVA PAWAR
+
+
+'''
+
+
+Experiment No. 13 : Write a python program to maintain club members, sort on roll numbers in ascending order.
+                    Write function “Ternary_Search” to search whether particular student is member of club or not.
+                    Ternary search is modified binary search that divides array into 3 halves instead of two.
+'''
+
+
+# Accepting Roll Numbers of the Students
+
+def accept_roll():
+    roll_no = []
+    no_of_students = int(input("Enter the number of students  : "))
+    for i in range(no_of_students):
+        roll_no.append(int(input("Enter Roll Number of Student {0} : ".format(i+1))))
+    return roll_no
+
+#<--------------------------------------------------------------------------------------------->
+
+# Printing the Roll Numbers of the Students
+
+def print_roll(roll_no):
+    for i in range(len(roll_no)):
+        print(roll_no[i],sep = "\n")
+
+#<--------------------------------------------------------------------------------------------->
+
+# Insertion Sort for Sorting the list of Roll Numbers
+
+def insertion_sort(roll_no):
+    for i in range(1,len(roll_no)):
+        key = roll_no[i]
+        j = i-1;
+        while j >= 0 and key < roll_no[j]:
+            roll_no[j+1] = roll_no[j]
+            j -= 1
+            roll_no[j+1] = key
+    return roll_no
+
+#<---------------------------------------------------------------------------------------------->
+
+# Function for performing Non-Recursive Ternary Search
+
+def NR_Ternary_Search(roll,roll_find):
+    left = 0
+    right = len(roll) - 1
+    while left <= right:
+        mid1 = left + (right - left) // 3
+        mid2 = left + 2 * (right - left) // 3
+        if roll_find == roll[left]:
+            return left
+        elif roll_find == roll[right]:
+            return right
+        elif roll_find < roll[left] or roll_find > roll[right]:
+            return -1
+        elif roll_find <= roll[mid1]:
+            right = mid1
+        elif roll_find > roll[mid1] and roll_find <= roll[mid2]:
+            left = mid1 + 1
+            right = mid2
+        else:
+            left = mid2 + 1
+    return -1
+
+#<------------------------------------------------------------------------------------------------->
+
+# Function for performing Recursive Ternary Search
+
+def R_Ternary_Search(roll, left, right, roll_find):
+    if (right >= left):
+        mid1 = left + (right - left) // 3
+        mid2 = right - (right - left) // 3
+        if (roll[mid1] == roll_find):
+            return mid1
+        if (roll[mid2] == roll_find):
+            return mid2
+
+        if (roll_find < roll[mid1]):
+            return R_Ternary_Search(roll, left, mid1 - 1, roll_find)
+        elif (roll_find > roll[mid2]):
+            return R_Ternary_Search(roll, mid2 + 1, right, roll_find)
+        else:
+            return R_Ternary_Search(roll, mid1 + 1, mid2 - 1, roll_find)
+    return -1
+
+#<---------------------------------------------------------------------------------------------------->
+
+# Main
+unsort_Roll = []
+sort_Roll = []
+flag = 1
+
+while flag == 1:
+        print("\n---------------------MENU---------------------")
+        print("1. Accept Student Roll Numbers")
+        print("2. Display the Roll Numbers of Student")
+        print("3. Sort Roll Numbers from the list")
+        print("4. Perform Non-Recursive Ternary Search")
+        print("5. Perform Recursive Ternary Search")
+        print("6. Exit\n")
+
+        ch = int(input("Enter your choice (from 1 to 6) : "))
+
+        if ch == 1:
+             unsort_Roll = accept_roll()
+
+        elif ch == 2:
+            print_roll(unsort_Roll)
+
+        elif ch == 3:
+            print("Elements after performing Insertion Sort : \n")
+            sort_Roll = insertion_sort(unsort_Roll)
+            print_roll(sort_Roll)
+
+        elif ch == 4:
+            find_roll = int(input("Enter the Roll Number to be searched : "))
+            index = NR_Ternary_Search(sort_Roll,find_roll)
+            if index != -1:
+                 print("The Roll Number",find_roll,"is found at position",index+1)
+            else:
+                 print("Roll Number",find_roll,"nor found!!")
+
+        elif ch == 5:
+            find_roll = int(input("Enter the Roll Number to be searched : "))
+            left = 0
+            right = len(sort_Roll) - 1
+            index = R_Ternary_Search(sort_Roll,left,right,find_roll)
+            if index != -1:
+                print("The Roll Number",find_roll,"is found at position",index+1)
+            else:
+                print("Roll Number",find_roll,"nor found!!")
+
+        elif ch == 6:
+            print("Thanks for using this program!!")
+            flag=0
+
+        else:
+            print("Wrong choice!!")
+            flag = 0
+
+
+#<-------------------------------------END OF PROGRAM------------------------------------------>
+
+
+'''
+
+
+Experiment Number 14: Write a python program to store first year percentage of students in an array.
+                      Write function for sorting array of floating point numbers in ascending order using:
+                      a) Selection Sort
+                      b) Bubble Sort and display top five scores
+'''
+
+
+# Function for Selection Sort of elements
+
+def Selection_Sort(marks):
+    for i in range(len(marks)):
+
+        # Find the minimum element in remaining unsorted array
+        min_idx = i
+        for j in range(i + 1, len(marks)):
+            if marks[min_idx] > marks[j]:
+                min_idx = j
+
+        # Swap the minimum element with the first element
+        marks[i], marks[min_idx] = marks[min_idx], marks[i]
+
+    print("Marks of students after performing Selection Sort on the list : ")
+    for i in range(len(marks)):
+        print(marks[i])
+
+#<--------------------------------------------------------------------------------------->
+
+# Function for Bubble Sort of elements
+
+def Bubble_Sort(marks):
+    n = len(marks)
+    # Traverse through all array elements
+    for i in range(n - 1):
+        # Last i elements are already in place
+        for j in range(0, n - i - 1):
+
+            # Traverse the array from 0 to n-i-1
+            # Swap if the element found is greater than the next element
+            if marks[j] > marks[j + 1]:
+                marks[j], marks[j + 1] = marks[j + 1], marks[j]
+
+    print("Marks of students after performing Bubble Sort on the list :")
+    for i in range(len(marks)):
+        print(marks[i])
+
+#<--------------------------------------------------------------------------------------->
+
+# Function for displaying top five marks
+
+def top_five_marks(marks):
+    print("Top",len(marks),"Marks are : ")
+    print(*marks[::-1], sep="\n")
+
+#<---------------------------------------------------------------------------------------->
+
+# Main
+
+marks=[]
+n = int(input("Enter number of students whose marks are to be displayed : "))
+print("Enter marks for",n,"students (Press ENTER after every students marks): ")
+for i in range(0, n):
+    ele = int(input())
+    marks.append(ele)  # adding the element
+
+print("The marks of",n,"students are : ")
+print(marks)
+
+flag=1;
+while flag==1:
+    print("\n---------------MENU---------------")
+    print("1. Selection Sort of the marks")
+    print("2. Bubble Sort of the marks")
+    print("3. Exit")
+    ch=int(input("\n\nEnter your choice (from 1 to 3) : "))
+
+    if ch==1:
+        Selection_Sort(marks)
+        a=input("\nDo you want to display top marks from the list (yes/no) : ")
+        if a=='yes':
+            top_five_marks(marks)
+        else:
+            print("\nThanks for using this program!")
+            flag=0
+
+    elif ch==2:
+        Bubble_Sort(marks)
+        a = input("\nDo you want to display top five marks from the list (yes/no) : ")
+        if a == 'yes':
+            top_five_marks(marks)
+        else:
+            print("\nThanks for using this program!")
+            flag = 0
+
+    elif ch==3:
+        print("\nThanks for using this program!!")
+        flag=0
+
+    else:
+        print("\nEnter a valid choice!!")
+        print("\nThanks for using this program!!")
+        flag=0
+
+
+#<----------------------------------------END OF PROGRAM------------------------------------------------->
+
+
+'''
+
+Experiment No. 16 : Write a python program to store first year percentage of students in array.
+                    Write function for sorting array of floating point numbers in ascending order using
+                    quick sort and display top five scores.
+'''
+
+
+# Function for accepting the percentage of the Students
+
+def input_percentage():
+    perc = []
+    number_of_students = int(input("Enter the number of Students : "))
+    for i in range(number_of_students):
+        perc.append(float(input("Enter the percentage of Student {0} : ".format(i+1))))
+    return perc
+
+#<--------------------------------------------------------------------------------------------------------------------->
+
+# Function for printing the percentage of the Students
+
+def print_percentage(perc):
+    for i in range(len(perc)):
+        print(perc[i],sep = "\n")
+
+#<--------------------------------------------------------------------------------------------------------------------->
+
+# Function for performing partition of the Data
+
+def percentage_partition(perc,start,end):
+    pivot = perc[start]
+    lower_bound = start + 1
+    upper_bound = end
+
+    while True:
+        while lower_bound <= upper_bound and perc[lower_bound] <= pivot:
+            lower_bound += 1
+
+        while lower_bound <= upper_bound and perc[upper_bound] >= pivot:
+            upper_bound -= 1
+
+        if lower_bound <= upper_bound:
+            perc[lower_bound],perc[upper_bound] = perc[upper_bound],perc[lower_bound]
+
+        else:
+            break
+
+
+    perc[start],perc[upper_bound] = perc[upper_bound],perc[start]
+
+    return upper_bound
+
+#<--------------------------------------------------------------------------------------------------------------------->
+
+# Function for performing Quick Sort on the Data
+
+def Quick_Sort(perc,start,end):
+    while start < end:
+        partition = percentage_partition(perc,start,end)
+        Quick_Sort(perc,start,partition-1)
+        Quick_Sort(perc,partition+1,end)
+        return perc
+
+#<--------------------------------------------------------------------------------------------------------------------->
+
+# Function for Displaying Top Five Percentages of Students
+
+def display_top_five(perc):
+    print("Top Five Percentages are : ")
+    if len(perc) < 5:
+        start, stop = len(perc) - 1, -1
+    else:
+        start, stop = len(perc) - 1, len(perc) - 6
+
+    for i in range(start, stop, -1):
+        print(perc[i],sep = "\n")
+
+
+#<--------------------------------------------------------------------------------------------------------------------->
+
+# Main
+
+unsorted_percentage = []
+sorted_percentage = []
+flag = 1
+
+while flag == 1:
+    print("\n--------------------MENU--------------------")
+    print("1. Accept the Percentage of Students")
+    print("2. Display the Percentages of Students")
+    print("3. Perform Quick Sort on the Data")
+    print("4. Exit")
+
+    ch = int(input("Enter your choice (from 1 to 4) : "))
+
+    if ch == 1:
+        unsorted_percentage = input_percentage()
+
+    elif ch == 2:
+        print_percentage(unsorted_percentage)
+
+    elif ch == 3:
+        print("Percentages of Students after performing Quick Sort : ")
+        sorted_percentage = Quick_Sort(unsorted_percentage,0,len(unsorted_percentage)-1)
+        print_percentage(sorted_percentage)
+        a = input("Do you want to display the Top 5 Percentages of Students (yes/no) : ")
+        if a == 'yes':
+            display_top_five(sorted_percentage)
+
+    elif ch == 4:
+        print("Thanks for using this program!!")
+        flag = 0
+
+    else:
+        print("Invalid Choice!!")
+
+
+#<-----------------------------------------------END OF PROGRAM-------------------------------------------------------->
+
+
+/*
+ 
+
+Department of Computer Engineering has student's club named
+'Pinnacle Club'. Students of Second, third and final year of
+department can be granted membership on request. Similarly one
+may cancel the membership of club. First node is reserved for
+president of club and last node is reserved for secretary of
+club. Write C++ program to maintain club member‘s information
+using singly linked list. Store student PRN and Name. Write
+functions to
+a) Add and delete the members as well as president or even
+secretary.
+b) Compute total number of members of club
+c) Display members
+d) Display list in reverse order using recursion
+e) Two linked lists exists for two divisions. Concatenate two
+lists
+*/
+
+# include<stdio.h>
+# include <iostream>
+# include<string>
+using namespace std;
+class list;
+class node
+{
+int prn;
+string name;
+node *next;
+public:
+node(int
+x, string
+nm)
+{
+prn = x;
+next = NULL;
+name = nm;
+}
+friend
+
+class list;
+};
+class list
+{
+node * start;
+public:
+list()
+{
+start = NULL;
+}
+void
+create();
+void
+display();
+void
+insertAtBeginning();
+void
+insertAtEnd();
+void
+insertAfter();
+void
+deleteAtFirst();
+void
+deleteByValue();
+void
+deleteAtEnd();
+int
+computeTotal();
+void
+sortList();
+void
+concatList(list & q1);
+void
+displayRev(node * t);
+bool
+reverseDisplay() // function is only
+for passing start as argument to recursive function
+{
+if (start == NULL)
+return false;
+node * temp = start;
+displayRev(temp);
+// cout << "(President)";
+return true;
+}
+};
+void
+
+list::displayRev(node * t)
+{
+if (t == NULL)
+return;
+else
+{
+displayRev(t->next);
+cout << "\nPRN NO:" << t->prn << " Name: " << t->name;
+}
+}
+void
+list::create()
+{
+int
+no;
+string
+nam;
+if (start == NULL)
+{
+cout << "Enter PRN number: ";
+cin >> no;
+cout << "Enter name: ";
+cin >> nam;
+cout << nam;
+start = new
+node(no, nam);
+cout << "\n=============== List Created ===============";
+}
+else
+{
+cout << "\nList is already created.";
+}
+}
+void
+list::display()
+{
+node * t;
+t = start;
+if (start == NULL)
+cout << "\nList is Empty";
+else
+{cout << "\n=============== List: ===============\n";
+while (t != NULL){
+cout << t->prn << " " << t->name << " \n";
+t=t->next;
+}
+// cout << t->prn << " " << t->name << " \n";
+}
+}
+void
+
+list::insertAtBeginning()
+{
+int
+no;
+string
+nam;
+node * temp;
+if (start == NULL)
+{
+create();
+}
+else
+{
+cout << "\nEnter PRN Number : ";
+cin >> no;
+cout << "Enter Name : ";
+cin >> nam;
+// cout << nam;
+temp = new
+node(no, nam);
+temp->next = start;
+start = temp;;
+cout << "Inserted " << temp->name << " at the
+beginning.";
+}
+}
+void
+list::insertAtEnd()
+{
+int
+no;
+string
+nam;
+node * t;
+if (start == NULL)
+create();
+else
+{
+cout << "\nEnter PRN Number : ";
+cin >> no;
+cout << "Enter Name : ";
+cin >> nam;
+t = start;
+while (t->next != NULL)
+t = t->next;
+node * p = new
+node(no, nam);
+t->next = p;
+}
+}
+
+void
+list::insertAfter()
+{
+int
+prev_no;
+cout << "\nEnter PRN No. after do you want insert : ";
+cin >> prev_no;
+node * t;
+t = start;
+string
+nam;
+int
+flag = 0, no;
+while (t != NULL)
+{
+if (t->prn == prev_no)
+{
+flag = 1;
+break;
+}
+t = t->next;
+}
+if (flag == 1)
+{
+node * p;
+cout << "\nEnter PRN Number : ";
+cin >> no;
+cout << "Enter Name : ";
+cin >> nam;
+p=new node(no, nam);
+p->next=t->next;
+t->next=p;
+}
+else
+{
+cout << "\n" << prev_no << " is not in list.";
+}
+}
+void list::
+deleteAtFirst()
+{
+node * t;
+if (start == NULL)
+cout << "\nClub is Empty..";
+else
+{
+t=start;
+start=start->next;
+t->next=NULL; // Not necessary
+
+delete t;
+cout << "\nPresident deleted..";
+}
+}
+void list::
+deleteByValue()
+{
+int
+no, flag = 0;
+node * t, *prev;
+if (start == NULL)
+cout << "\nList/Club is empty";
+else
+{
+cout << "\nEnter PRN No. of member to be deleted : ";
+cin >> no;
+t=start->next; // t=start if we have to delete president also..start->next is first member
+while (t->next != NULL)
+{
+if (t->prn == no)
+{
+flag = 1;
+break;
+}
+prev = t;
+t = t->next;
+}
+if (flag == 1)
+{
+prev->next=t->next;
+t->next=NULL;
+delete t;
+cout << "\nMember with PRN No: " << no << " is deleted.";
+}
+else
+cout << "\nMember not found in List./President or Secretary cannot be deleted.";
+}
+}
+void list::
+deleteAtEnd()
+{
+node * t, *prev;
+t = start;
+if (start == NULL)
+cout << "\nClub is Empty..";
+else
+{
+
+while (t->next != NULL)
+{
+prev = t;
+t = t->next;
+}
+prev->next = NULL;
+delete
+t;
+cout << "\nSecretary Deleted.";
+}
+}
+int
+list::computeTotal()
+{
+node * t;
+int
+count = 0;
+t = start;
+if (start == NULL)
+{
+cout << "\nList is empty.";
+return 0;
+}
+while (t != NULL)
+{
+count + +;
+t = t->next;
+}
+return count;
+}
+void
+list::sortList()
+{
+node * i, *j, *last = NULL;
+int
+tprn;
+string
+tname;
+if (start == NULL)
+{
+cout << "\nList is empty.";
+return;
+}
+for (i=start;i->next != NULL;i=i->next)
+{
+for (j=start;j->next != last;j=j->next)
+{
+
+if ((j->prn) > (j->next->prn))
+
+{
+tprn = j->prn;
+tname = j->name;
+j->prn = j->next->prn;
+j->name = j->next->name;
+j->next->prn = tprn;
+j->next->name = tname;
+}
+}
+}
+cout << "\n List is sorted.";
+
+display();
+
+}
+void
+list::concatList(list & q1)
+{
+
+node * t, *p;
+t = q1.start;
+if (t == NULL)
+{
+
+cout << "\nList 2 is empty";
+
+return;
+}
+p = start; // first
+list
+while (p->next != NULL)
+{
+p = p->next;
+}
+
+p->next = t;
+q1.start = NULL; // second
+list is set
+to
+null
+cout << "\nAfter concatenation list : \n";
+
+display();
+}
+int
+main()
+{
+list * l;
+int
+choice, selectList;
+list
+l1, l2;
+l = & l1;
+X: cout << "\nSelect List\n1.List 1\n2.List 2\nEnter choice : ";
+
+cin >> selectList;
+if (selectList == 1)
+{
+l = & l1;
+}
+else if (selectList == 2)
+{
+l = & l2;
+}
+else
+{
+
+cout << "\nWrong list Number.";
+goto
+X;
+}
+do
+{
+
+cout << "\n1. Create\n2. Insert President\n3. Insert secretary\n4. Insert after position(member)\n";
+cout<<"5. Display list\n6. Delete President\n7.Delete Secretary\n8. Delete Member\n9. Find total No. of members\n10. Sort list\n11. Reselect List";
+cout<< "\n12. Combine lists\n13.Reverse Display\n0. Exit\nEnter your choice :\t";
+cin >> choice;
+switch(choice)
+
+{
+
+case
+1: l->create();
+break;
+case
+2: l->insertAtBeginning();
+
+break;
+case
+3: l->insertAtEnd();
+
+break;
+case
+
+4: l->insertAfter();
+break;
+case
+5: l->display();
+
+break;
+case
+6: l->deleteAtFirst();
+
+break;
+case
+
+7: l->deleteAtEnd();
+
+break;
+
+case
+
+8: l->deleteByValue();
+
+break;
+case
+9: cout << "\nTotal members(including President & Secretary) : " << l->computeTotal();
+break;
+case
+10: l->sortList();
+
+break;
+case
+11:
+goto
+X;
+break;
+case
+12:
+l1.concatList(l2);
+
+break;
+case
+13:
+l->reverseDisplay();
+break;
+deafult:
+cout << "Wrong choice";
+}
+
+}while (choice != 0);
+cout << "\n=============== GOOD BYE ===============\n";
+return 0;
+
+}
+
+
+
+/*
+
+
+The ticket booking system of Cinemax theater has to
+be implemented using C++ program.
+There are 10 rows and 7 seats in each row. Doubly
+circular linked list has to be maintained
+to keep track of free seats at rows. Assume some
+random booking to start with. Use array to store
+pointers (Head pointer) to each row. On demand
+a) The list of available seats is to be displayed
+b) The seats are to be booked
+c) The booking can be cancelled
+*/
+
+#include <iostream>
+#include<stdlib.h>
+using namespace std;
+class node
+{ public:
+node* next;
+node* prev;
+int seat;
+string id;
+int status;
+};
+class cinemax
+{
+public:
+node* head,* tail ,* temp;
+cinemax()
+{
+head=NULL;
+}
+void create_list();
+void display();
+void book();
+void cancel();
+void avail();
+
+};
+void cinemax::create_list()
+{
+int i=1;
+temp=new node;
+temp->seat=1;
+temp->status=0;
+temp->id="null";
+tail=head=temp;
+for(int i=2;i<=70;i++)
+{
+node *p;
+p= new node;
+p->seat=i;
+p->status=0;
+p->id="null";
+tail->next=p;
+p->prev=tail;
+tail=p;
+tail->next=head;
+head->prev=tail;
+
+}
+}
+void cinemax::display()
+{
+{ int r=1;
+node* temp;
+temp=head;
+int count=0;
+cout<<"\n------------------------------------------------------------------------------------\n";
+cout<<" Screen
+this way \n";
+cout<<"------------------------------------------------------------------------------------\n";
+while(temp->next!=head)
+{
+if(temp->seat/10==0)
+cout<<"S0"<<temp->seat<<" :";
+else
+cout<<"S"<<temp->seat<<" :";
+
+if(temp->status==0)
+cout<<"|___| ";
+else
+cout<<"|_B_| ";
+count++;
+if(count%7==0)
+{
+cout<<endl;
+r++;
+}
+temp=temp->next;
+}
+cout<<"S"<<temp->seat<<" :";
+if(temp->status==0)
+cout<<"|___| ";
+else
+cout<<"|_B_| ";
+}
+}
+void cinemax::book()
+{ int x;
+string y;
+label:
+cout<<"\n\n\nEnter seat number to be booked\n";
+cin>>x;
+cout<<"Enter your ID number\n";
+cin>>y;
+if(x<1||x>70)
+{
+cout<<"Enter correct seat number to book (1-70)\n";
+goto label;
+}
+node *temp;
+temp=new node;
+temp=head;
+while(temp->seat!=x)
+{
+temp=temp->next;
+}
+
+if(temp->status==1)
+cout<<"Seat already booked!\n";
+else{
+temp->status=1;
+temp->id=y;
+cout<<"Seat "<<x<<" booked!\n";
+}
+
+}
+void cinemax::cancel()
+{
+int x;
+string y;
+label1:
+cout<<"Enter seat number to cancel booking\n";
+cin>>x;
+cout<<"Enter you ID\n";
+cin>>y;
+if(x<1||x>70)
+{
+cout<<"Enter correct seat number to cancel (1-70)\n";
+goto label1;
+}
+node *temp;
+temp=new node;
+temp=head;
+while(temp->seat!=x)
+{
+temp=temp->next;
+}
+if(temp->status==0)
+{
+cout<<"Seat not booked yet!!\n";
+}
+else
+{
+if(temp->id==y)
+{
+temp->status=0;
+cout<<"Seat Cancelled!\n";
+}
+
+else
+cout<<"Wrong User ID !!! Seat cannot be cancelled!!!\n";
+}
+}
+void cinemax::avail()
+{
+int r=1;
+node* temp;
+temp=head;
+int count=0;
+cout<<"\n\n\n\n";
+cout<<"\n------------------------------------------------------------------------------------\n";
+cout<<" Screen this way \n";
+cout<<"------------------------------------------------------------------------------------\n";
+while(temp->next!=head)
+{
+{
+if(temp->seat/10==0)
+cout<<"S0"<<temp->seat<<" :";
+else
+cout<<"S"<<temp->seat<<" :";
+if(temp->status==0)
+cout<<"|___| ";
+else if(temp->status==1)
+cout<<" ";
+
+count++;
+if(count%7==0)
+
+{
+
+cout<<endl;
+
+}
+
+}
+temp=temp->next;
+}
+if(temp->status==0)
+{
+cout<<"S"<<temp->seat<<" :";
+
+if(temp->status==0)
+cout<<"|___| ";
+}
+
+}
+int main()
+{ cinemax obj;
+obj.create_list();
+int ch;
+char c='y';
+while(c=='y')
+{ obj.display();
+cout<<"\n*********************************************\n";
+cout<<" CINEMAX MOVIE THEATRE\n";
+cout<<"*********************************************\n";
+cout<<"\nEnter Choice\n1.Current SeatStatus\n2.Book Seat \n3.Available Seat\n4.CancelSeat\n";
+cin>>ch;
+switch(ch)
+{
+case 1:obj.display();
+break;
+case 2: obj.book();
+break;
+case 3:obj.avail();
+break;
+case 4: obj.cancel();
+break;
+default: cout<<"Wrong choice input\n";
+}
+cout<<"\nDo you want to perform any other operation : (y/n)\n";
+cin>>c;
+}
+return 0;
+}
+
+
+
+/*
+
+
+A palindrome is a string of character that‘s the same forward and backward. Typically, punctuation, capitalization, 
+and spaces are ignored. For example, “Poor Dan is in a droop” is a palindrome, as can be seen by examining the characters
+“poor danisina droop” and observing that they are the same forward and backward. One way to check for a palindrome is to reverse
+the characters in the string and then compare with them the original-in a palindrome, the sequence will be identical. Write C++ program 
+with functions- 
+a) To print original string followed by reversed string using stack 
+b) To check whether given string is palindrome or not
+
+*/
+
+#include<iostream>
+#include<string.h>
+#define max 50
+using namespace std;
+
+class STACK
+{
+	private:
+		char a[max];
+		int top;
+	
+	public:
+		STACK()
+		{
+			top=-1;	
+		}	
+		
+		void push(char);
+		void reverse();	
+		void convert(char[]);
+		void palindrome();
+};
+
+void STACK::push(char c)
+{
+	top++;
+	a[top] = c;
+	a[top+1]='\0';
+	
+	cout<<endl<<c<<" is pushed on stack ...";
+}
+
+void STACK::reverse()
+{
+	char str[max];
+	
+	cout<<"\n\nReverse string is : ";
+		
+	for(int i=top,j=0; i>=0; i--,j++)
+	{
+		cout<<a[i];
+		str[j]=a[i];
+	}
+	
+	cout<<endl;
+}
+
+
+void STACK::convert(char str[])
+{
+	int j,k,len = strlen(str);
+
+	for(j=0, k=0; j<len; j++)
+	{
+		if( ( (int)str[j] >= 97 && (int)str[j] <=122 ) || ( (int)str[j] >= 65 && (int)str[j] <=90 ))
+		{
+			if( (int)str[j] <=90 )
+			{
+				str[k] = (char)( (int)str[j] + 32 );
+			}else
+			{
+				str[k] = str[j];				
+			}
+
+			k++;			
+		}
+	}
+	str[k]='\0';
+
+	cout<<endl<<"Converted String : "<<str<<"\n";
+}
+
+
+
+
+void STACK::palindrome()
+{	
+	char str[max];
+	int i,j;		
+
+	for(i=top,j=0; i>=0; i--,j++)
+	{
+		str[j]=a[i];
+	}
+	str[j]='\0';
+	
+	
+	if(strcmp(str,a) == 0)
+		cout<<"\n\nString is palindrome...";
+	else
+		cout<<"\n\nString is not palindrome...";
+}
+
+
+int main()
+{
+	STACK stack;
+
+	char str[max];
+	int i=0;
+	
+	cout<<"\nEnter string to be reversed and check is it palindrome or not : \n\n";
+	
+	cin.getline(str , 50);
+	
+	stack.convert(str);
+	
+	while(str[i] != '\0')
+	{
+		stack.push(str[i]);
+		i++;
+	}
+
+	stack.palindrome();
+
+	stack.reverse();
+	
+}
+
+
+
+/*
+
+In any language program mostly syntax error occurs due to unbalancing delimiter such as
+(),{},[]. Write C++ program using stack to check whether given expression is well parenthesized or not.
+*/
+
+
+#include <iostream>
+using namespace std;
+#define size 10
+
+class stackexp
+{
+    int top;
+    char stk[size];
+public:
+    stackexp()
+    {
+     top=-1;
+    }
+    void push(char);
+    char pop();
+    int isfull();
+    int isempty();
+};
+
+void stackexp::push(char x)
+{
+    top=top+1;
+    stk[top]=x;
+}
+
+char stackexp::pop()
+{
+    char s;
+    s=stk[top];
+    top=top-1;
+    return s;
+}
+
+int stackexp::isfull()
+{
+    if(top==size)
+        return 1;
+    else
+        return 0;
+}
+
+int stackexp::isempty()
+{
+    if(top==-1)
+        return 1;
+    else
+        return 0;
+}
+
+int main()
+{
+    stackexp s1;
+    char exp[20],ch;
+    int i=0;
+    cout << "\n\t!! Parenthesis Checker..!!!!" << endl; // prints !!!Hello World!!!
+    cout<<"\nEnter the expression to check whether it is in well form or not :  ";
+    cin>>exp;
+    if((exp[0]==')')||(exp[0]==']')||(exp[0]=='}'))
+    {
+        cout<<"\n Invalid Expression.....\n";
+        return 0;
+    }
+    else
+    {
+        while(exp[i]!='\0')
+        {
+            ch=exp[i];
+            switch(ch)
+            {
+            case '(':s1.push(ch);break;
+            case '[':s1.push(ch);break;
+            case '{':s1.push(ch);break;
+            case ')':s1.pop();break;
+            case ']':s1.pop();break;
+            case '}':s1.pop();break;
+            }
+            i=i+1;
+        }
+    }
+    if(s1.isempty())
+    {
+        cout<<"\nExpression is well parenthesised...\n";
+    }
+    else
+    {
+        cout<<"\nSorry !!! Invalid Expression or not in well parenthesized....\n";
+    }
+    return 0;
+}
+
+
+/*
+Queues are frequently used in computer programming, and a typical example is the creation of a job queue by an operating system. 
+If the operating system does not use priorities, then the jobs are processed in the order they enter the system.
+Write C++ program for simulating job queue. Write functions to add job and delete job from queue.
+*/
+
+#include <iostream>
+#define MAX 10
+using namespace std;
+struct queue
+{       int data[MAX];
+	int front,rear;
+};
+class Queue
+{    struct queue q;
+   public:
+      Queue(){q.front=q.rear=-1;}
+      int isempty();
+      int isfull();
+      void enqueue(int);
+      int delqueue();
+      void display();
+};
+int Queue::isempty()
+{
+	return(q.front==q.rear)?1:0;
+}
+int Queue::isfull()
+{    return(q.rear==MAX-1)?1:0;}
+void Queue::enqueue(int x)
+{q.data[++q.rear]=x;}
+int Queue::delqueue()
+{return q.data[++q.front];}
+void Queue::display()
+{   int i;
+    cout<<"\n";
+    for(i=q.front+1;i<=q.rear;i++)
+	     cout<<q.data[i]<<" ";
+}
+int main()
+{      Queue obj;
+	int ch,x;
+	do{    cout<<"\n 1.Insert Job\n 2.Delete Job\n 3.Display\n 4.Exit\n Enter your choice : ";
+	       cin>>ch;
+	switch(ch)
+	{  case 1: if (!obj.isfull())
+		   {   cout<<"\n Enter data : \n";
+			cin>>x;
+			obj.enqueue(x);
+			cout<<endl;
+		   }
+	          else
+		      cout<< "Queue is overflow!!!\n\n";
+	           break;
+	   case 2: if(!obj.isempty())
+			    cout<<"\n Deleted Element = "<<obj.delqueue()<<endl;
+		    else
+			{   cout<<"\n Queue is underflow!!!\n\n";  }
+		    cout<<"\nRemaining Jobs : \n";
+		    obj.display();
+	           break;
+	  case 3: if (!obj.isempty())
+	        {  cout<<"\n Queue contains : \n";
+		       obj.display();
+	        }
+	        else
+		         cout<<"\n Queue is empty!!!\n\n";
+	       break;
+	  case 4: cout<<"\n Exiting Program.....";
+        }
+      }while(ch!=4);
+return 0;
+}
+
+
+/*
+A double-ended queue (deque) is a linear list in which additions and deletions may be made at either end. Obtain a data
+representation mapping a deque into a one-dimensional array. Write C++ program to simulate deque with functions to add 
+and delete elements from either end of the deque. 
+*/
+
+#include<iostream>
+#include<stdio.h>
+#define MAX 10
+using namespace std;
+
+struct que
+{
+    int arr[MAX];
+    int front,rear;
+};
+
+void init(struct que *q)
+{
+    q->front=-1;
+    q->rear=-1;
+}
+
+void print(struct que q)
+{
+    int i;
+    i=q.front;
+    while(i!=q.rear)
+    {
+        cout<<"\t"<<q.arr[i];
+        i=(i+1)%MAX;
+    }
+    cout<<"\t"<<q.arr[q.rear];
+}
+
+int isempty(struct que q)
+{
+    return q.rear==-1?1:0;
+}
+
+int isfull(struct que q)
+{
+    return (q.rear+1)%MAX==q.front?1:0;
+}
+
+void addf(struct que *q,int data)
+{
+    if(isempty(*q))
+    {
+        q->front=q->rear=0;
+        q->arr[q->front]=data;
+    }
+    else
+    {
+        q->front=(q->front-1+MAX)%MAX;
+        q->arr[q->front]=data;
+    }
+}
+
+void addr(struct que *q,int data)
+{
+    if(isempty(*q))
+    {
+        q->front=q->rear=0;
+        q->arr[q->rear]=data;
+    }
+    else
+    {
+        q->rear=(q->rear+1)%MAX;
+        q->arr[q->rear]=data;
+    }
+}
+
+int delf(struct que *q)
+{
+    int data1;
+    data1=q->arr[q->front];
+    if(q->front==q->rear)
+        init(q);
+    else
+        q->front=(q->front+1)%MAX;
+    return data1;
+}
+
+int delr(struct que *q)
+{
+    int data1;
+    data1=q->arr[q->rear];
+    if(q->front==q->rear)
+        init(q);
+    else
+        q->rear=(q->rear-1+MAX)%MAX;
+    return data1;
+}
+
+int main()
+{
+    struct que q;
+    int data,ch;
+    init(&q);
+    while(ch!=6)
+    {
+        cout<<"\t\n1.Insert front"
+                "\t\n2.Insert rear"
+                "\t\n3.Delete front"
+                "\t\n4.Delete rear"
+                "\t\n5.Print"
+                "\t\n6.Exit";
+         cout<<"\nEnter your choice : ";
+        cin>>ch;
+        switch(ch)
+        {
+           case 1:
+              cout<<"\nEnter data to insert front : ";
+              cin>>data;
+              addf(&q,data);
+              break;
+
+           case 2:
+               cout<<"\nEnter the data to insert rear : ";
+               cin>>data;
+               addr(&q,data);
+               break;
+
+           case 3:
+               if(isempty(q))
+                   cout<<"\nDequeue is empty!!!";
+               else
+               {
+                   data=delf(&q);
+                   cout<<"\nDeleted data is : "<<data;
+               }
+               break;
+
+           case 4:
+               if(isempty(q))
+                   cout<<"\nDequeue is empty!!!";
+               else
+               {
+                   data=delr(&q);
+                   cout<<"\nDeleted data is : "<<data;
+               }
+               break;
+
+           case 5:
+                if(isempty(q))
+                    cout<<"\nDequeue is empty!!!";
+                else
+                {
+                    cout<<"\nDequeue elements are : ";
+                    print(q);
+                }
+                break;
+        }
+    }
+    return 0;
+}
+
+
+/*
+Pizza parlor accepting maximum M orders. 
+Orders are served in first come first served basis. Order once placed can not be cancelled. 
+Write C++ program to simulate the system using circular queue using array.
+*/
+
+#include<iostream>
+#include<cstdlib>
+using namespace std;
+class pizza
+{
+ int front,rear,q[5];
+ public:
+ pizza()
+ {
+ front=-1;
+ rear=-1;
+ }
+ int isfull()
+ {
+
+if((front==0&&rear==4)||front==rear+1)
+ {
+ return 1;
+ }
+else
+{
+ return 0;
+ }
+ }
+ int isempty()
+ {
+ if(front==-1&&rear==-1)
+ {
+ return 1;
+ }
+ else
+{
+ return 0;
+ }
+ }
+ void add()
+ {
+ if(isfull()==0)
+ {
+ cout<<"\n Enter the Pizza ID: ";
+ if(front==-1&&rear==-1)
+ {
+ front=0;
+ rear=0;
+ cin>>q[rear];
+ }
+ else
+ {
+ rear=(rear+1)%5;
+ cin>>q[rear];
+ }
+ char c;
+ cout<<" Do you want to add another order ? ";
+ cin>>c;
+ if(c=='y'||c=='Y')
+ add();
+ }
+ else
+ {
+ cout<<"\n Orders are full ";
+ }
+
+ }
+ void serve()
+ {
+ if(isempty()==0)
+ {
+ if(front==rear)
+ {
+ cout<<"\n Order served is : "<<q[front];
+ front=-1;
+ rear=-1;
+ }
+ else
+ {
+ cout<<"\n Order served is : "<<q[front];
+ front=(front+1)%5;
+ }
+ }
+ else
+ {
+ cout<<"\n Orders are empty ";
+ }
+ }
+ void display()
+ {
+ if(isempty()==0)
+ {
+ for(int
+i=front;i!=rear;i=(i+1)%5)
+ {
+ cout<<q[i]<<"
+<- ";
+ }
+ cout<<q[rear];
+ }
+ else
+ {
+ cout<<"\n Orders are empty";
+ }
+ }
+ void check()
+ {
+ int ch;
+cout<<"\n\n * * * * PIZZA PARLOUR * * * * \n\n";
+ cout<<"\n 1. Add a Pizza \n 2. Display the Orders \n 3. Serve a pizza \n 4. Exit \n Enter your choice : ";
+ cin>>ch;
+switch(ch)
+{
+ case 1:
+ add();
+break;
+
+ case 2:
+
+display();
+ break;
+
+ case 3:
+
+serve();
+ break;
+
+ case 4:
+
+exit(0);
+
+ default:
+ cout<<"Invalid choice ";
+
+check();
+ }
+char ch1;
+cout<<"\n Do you want to continue? ";
+ cin>>ch1;
+ if(ch1=='y'||ch1=='Y')
+check();
+ }
+};
+int main()
+{
+ pizza p1;
+ p1.check();
+ return 0;
+}
+
