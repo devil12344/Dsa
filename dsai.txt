@@ -1,0 +1,1297 @@
+/******** Circular queue  ***********/
+#include<iostream>
+using namespace std;
+class CQueue
+{
+    int queue[5],front,rear,n;
+    public:
+       CQueue()
+       {
+           n=5;
+           front=-1;
+           rear=-1;
+       }
+       void enqueue(int data);
+       int dequeue();
+       void display();
+};
+void CQueue::enqueue(int data)
+{
+    if(front==-1 && rear==-1)
+    {
+        front=rear=0;
+        queue[rear]=data;
+    }
+    else if(((rear+1)%n)==front)
+    {
+        cout<<"queue is full";
+    }
+    else
+    {
+        rear=(rear+1)%n;
+        queue[rear]=data;
+    }
+}
+int CQueue::dequeue()
+{
+    int data;
+    if(front==-1)
+    {
+        cout<<"Underflow";
+    }    else if(front==rear)
+    {
+        data=queue[front];
+        front=rear=-1;
+    }
+    else
+    {
+        data=queue[front];
+        front=(front+1)%n;
+    }
+    return data;
+}
+void CQueue::display()
+{
+    int i=front;
+    if(front==-1 && rear==-1)
+    {
+        cout<<"\n queue is empty";
+    }
+    else
+    {
+        while(i!=rear)
+        {
+            cout<<queue[i]<<" ";
+            i=(i+1)%n;
+        }
+        cout<<queue[rear];
+    }
+}
+int main()
+{
+    int ch,data;
+    CQueue q=CQueue();
+    do
+    {
+        cout<<"\n 1. Enqueue(insertion)";
+        cout<<"\n 2. Dequue(deletion";
+        cout<<"\n 3. Display";
+        cout<<"\n 4. Exit";
+        cout<<"\n enter your choice: ";
+        cin>>ch;
+        switch(ch)
+        {
+            case 1:
+                    cout<<"\n enter data: ";
+                    cin>>data;
+                    q.enqueue(data);
+                    break;
+            case 2:
+                    data=q.dequeue();
+                    cout<<"\n deleted data is: "<<data;
+                    break;
+            case 3:
+                    q.display();
+                    break;
+        }
+    }while(ch!=4);
+    return 0;
+}
+
+
+
+
+/*****Searching And Sorting******/
+
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+struct Student
+{
+    int rollno;
+    char name[30];
+    float sgpa;
+};
+
+void display(struct Student s[30], int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        cout << "\n"
+             << s[i].rollno << "\t" << s[i].name << "\t" << s[i].sgpa;
+    }
+}
+
+void linear(struct Student s[30], int n)
+{
+    int count = 0;
+    float sa;
+    cout << "\nEnter sgpa to search: ";
+    cin >> sa;
+    for (int i = 0; i < n; i++)
+    {
+        if (s[i].sgpa == sa)
+        {
+            count++;
+            cout << "\n"
+                 << s[i].rollno << "\t" << s[i].name << "\t" << s[i].sgpa;
+        }
+    }
+    cout << "\nTotal records found: " << count;
+}
+
+void bubbleSort(struct Student s[30], int n)
+{
+    int i, j, temp1;
+    float temp2;
+    char temp3[30];
+    for (i = 0; i < n - 1; i++)
+    {
+        for (j = 0; j < n - 1 - i; j++)
+        {
+            if (s[j].rollno > s[j + 1].rollno)
+            {
+                temp1 = s[j].rollno;
+                s[j].rollno = s[j + 1].rollno;
+                s[j + 1].rollno = temp1;
+
+                temp2 = s[j].sgpa;
+                s[j].sgpa = s[j + 1].sgpa;
+                s[j + 1].sgpa = temp2;
+
+                strcpy(temp3, s[j].name);
+                strcpy(s[j].name, s[j + 1].name);
+                strcpy(s[j + 1].name, temp3);
+            }
+        }
+    }
+    display(s, n);
+}
+
+void insertionSort(struct Student s[30], int n)
+{
+    int i, j, temp1;
+    float temp2;
+    char temp3[30];
+    for (i = 1; i < n; i++)
+    {
+        strcpy(temp3, s[i].name);
+        temp1 = s[i].rollno;
+        temp2 = s[i].sgpa;
+        j = i - 1;
+        while (j >= 0 && strcmp(s[j].name, temp3) > 0)
+        {
+            strcpy(s[j + 1].name, s[j].name);
+            s[j + 1].rollno = s[j].rollno;
+            s[j + 1].sgpa = s[j].sgpa;
+            j--;
+        }
+        strcpy(s[j + 1].name, temp3);
+        s[j + 1].rollno = temp1;
+        s[j + 1].sgpa = temp2;
+    }
+    display(s, n);
+}
+
+void binarySearch(struct Student s[30], int n)
+{
+    int left = 0, right = n - 1, mid, flag = 0;
+    char data[30];
+    cout << "\nEnter name to search: ";
+    cin >> data;
+    while (left <= right)
+    {
+        mid = (left + right) / 2;
+        if (strcmp(data, s[mid].name) == 0)
+        {
+            flag = 1;
+            cout << "\nRecord found: ";
+            cout << "\n"
+                 << s[mid].rollno << "\t" << s[mid].name << "\t" << s[mid].sgpa;
+            break;
+        }
+        else if (strcmp(data, s[mid].name) < 0)
+        {
+            right = mid - 1;
+        }
+        else
+        {
+            left = mid + 1;
+        }
+    }
+    if (flag == 0)
+    {
+        cout << "\nRecord not found.";
+    }
+}
+
+int partition(struct Student s[30], int lb, int ub)
+{
+    int start = lb, end = ub, temp2;
+    float pivot = s[lb].sgpa;
+    char temp3[30];
+    while (start < end)
+    {
+        while (s[start].sgpa <= pivot)
+        {
+            start++;
+        }
+        while (s[end].sgpa > pivot)
+        {
+            end--;
+        }
+        if (start < end)
+        {
+            temp2 = s[start].rollno;
+            s[start].rollno = s[end].rollno;
+            s[end].rollno = temp2;
+
+            strcpy(temp3, s[start].name);
+            strcpy(s[start].name, s[end].name);
+            strcpy(s[end].name, temp3);
+
+            float temp1 = s[start].sgpa;
+            s[start].sgpa = s[end].sgpa;
+            s[end].sgpa = temp1;
+        }
+    }
+    float temp1 = s[lb].sgpa;
+    s[lb].sgpa = s[end].sgpa;
+    s[end].sgpa = temp1;
+
+    temp2 = s[lb].rollno;
+    s[lb].rollno = s[end].rollno;
+    s[end].rollno = temp2;
+
+    strcpy(temp3, s[lb].name);
+    strcpy(s[lb].name, s[end].name);
+    strcpy(s[end].name, temp3);
+
+    return end;
+}
+
+void quickSort(struct Student s[30], int lb, int ub)
+{
+    if (lb < ub)
+    {
+        int loc = partition(s, lb, ub);
+        quickSort(s, lb, loc - 1);
+        quickSort(s, loc + 1, ub);
+    }
+}
+
+int main()
+{
+    struct Student s[30];
+    int i, n, choice;
+
+    cout << "Enter number of students: ";
+    cin >> n;
+
+    cout << "\nEnter student information:\n";
+    for (i = 0; i < n; i++)
+    {
+        cout << "\nEnter student rollno, name, sgpa: ";
+        cin >> s[i].rollno >> s[i].name >> s[i].sgpa;
+    }
+
+    do
+    {
+        cout << "\n1. Linear Search (Find students with a specific sgpa)";
+        cout << "\n2. Bubble Sort (Sort students by roll number)";
+        cout << "\n3. Insertion Sort (Sort students alphabetically by name)";
+        cout << "\n4. Binary Search (Search students by name)";
+        cout << "\n5. Quick Sort (Display top 10 toppers)";
+        cout << "\n6. Exit";
+
+        cout << "\nEnter your choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+        case 1:
+            linear(s, n);
+            break;
+        case 2:
+            bubbleSort(s, n);
+            break;
+        case 3:
+            insertionSort(s, n);
+            break;
+        case 4:
+            binarySearch(s, n);
+            break;
+        case 5:
+            quickSort(s, 0, n - 1);
+            display(s, n > 10 ? 10 : n); // Display top 10 or all if less than 10
+            break;
+        }
+    } while (choice != 6);
+
+    return 0;
+}
+
+
+/********Heap Sorting******/
+
+
+#include <iostream>
+using namespace std;
+
+class Heap {
+    int a[50], b[50], n;
+
+public:
+    Heap() {
+        n = -1;
+    }
+
+    void insheap(int);
+    int delheap();
+    void display();
+    void heapsort();
+};
+
+void Heap::insheap(int item) {
+    int i, j;
+    n++;
+    i = n;
+
+    while (i > 0) {
+        j = (i - 1) / 2;
+
+        if (item >= a[j]) {
+            a[i] = item;
+            return;
+        }
+
+        a[i] = a[j];
+        i = j;
+    }
+
+    a[0] = item;
+}
+
+int Heap::delheap() {
+    int left, right, last, i, item;
+    item = a[0];
+    last = a[n];
+    n--;
+    i = 0;
+    left = 1;
+    right = 2;
+
+    while (right <= n) {
+        if (last >= a[left] && last >= a[right]) {
+            a[i] = last;
+            return item;
+        }
+
+        if (a[right] <= a[left]) {
+            a[i] = a[left];
+            i = left;
+        } else {
+            a[i] = a[right];
+            i = right;
+        }
+
+        left = (2 * i) + 1;
+        right = left + 1;
+    }
+
+    if (left == n) {
+        if (last < a[left]) {
+            a[i] = a[left];
+            i = left;
+        }
+    }
+
+    a[i] = last;
+    return item;
+}
+
+void Heap::display() {
+    cout << "\n Elements in heap are:\n";
+    for (int i = 0; i <= n; i++) {
+        cout << " " << a[i];
+    }
+}
+
+void Heap::heapsort() {
+    int item, ch, temp, j = 0;
+    do {
+        cout << "\n Enter item to insert: ";
+        cin >> item;
+        insheap(item);
+        cout << "\n Do you want to insert again? Press 1 for Yes and 0 for NO: ";
+        cin >> ch;
+    } while (ch != 0);
+
+    cout << "\n Before sorting:\n";
+    display();
+
+    temp = n;
+
+    while (n != -1) {
+        b[j] = delheap();
+        j++;
+    }
+
+    cout << "\n After sorting:\n";
+    for (int i = temp; i >= 0; i--) {
+        cout << " " << b[i];
+    }
+}
+
+int main() {
+    Heap h = Heap();
+    h.heapsort();
+    return 0;
+}
+
+
+
+/*****Expression Prefix to postfix(Recursive)(Non Recursive) *******/
+
+#include <iostream>
+using namespace std;
+struct node
+{
+    char data;
+    node *left, *right;
+};
+class stack
+{
+    node *data[30];
+    int top;
+
+public:
+    stack()
+    {
+        top = -1;
+    }
+    int empty()
+    {
+        if (top == -1)
+            return 1;
+        return 0;
+    }
+    void push(node *p)
+    {
+        data[++top] = p;
+    }
+    node *pop()
+    {
+        return (data[top--]);
+    }
+};
+class expression
+{
+public:
+    node *create_from_post(char[]);
+    void inorder(node *t);
+    void preorder(node *t);
+    void postorder(node *t);
+    void non_rec_inorder(node *t1);
+    void non_rec_preorder(node *t1);
+    void non_rec_postorder(node *t1);
+};
+node *expression::create_from_post(char exp[])
+{
+    char c;
+    stack s;
+    node *top, *t1, *t2, *root;
+    int i;
+    for (i = 0; exp[i] != '\0'; i++)
+    {
+        c = exp[i];
+        if (isalnum(c))
+        {
+            top = new node;
+            top->left = NULL;
+            top->right = NULL;
+            top->data = c;
+            s.push(top);
+        }
+        else
+        {
+            t2 = s.pop();
+
+            t1 = s.pop();
+            top = new node;
+            top->data = c;
+            top->left = t1;
+            top->right = t2;
+            s.push(top);
+        }
+    }
+    root = s.pop();
+    return (root);
+}
+void expression::inorder(node *t)
+{
+    if (t != NULL)
+    {
+        inorder(t->left);
+        cout << " " << t->data;
+        inorder(t->right);
+    }
+}
+void expression::preorder(node *t)
+{
+    if (t != NULL)
+    {
+        cout << " " << t->data;
+        preorder(t->left);
+        preorder(t->right);
+    }
+}
+void expression::postorder(node *t)
+{
+    if (t != NULL)
+    {
+        postorder(t->left);
+        postorder(t->right);
+        cout << " " << t->data;
+    }
+}
+void expression::non_rec_inorder(node *t1)
+{
+    stack s;
+    while (!s.empty() || t1 != NULL)
+    {
+        while (t1 != NULL)
+        {
+            s.push(t1);
+            t1 = t1->left;
+        }
+        t1 = s.pop();
+        cout << " " << t1->data;
+        t1 = t1->right;
+    }
+}
+void expression::non_rec_preorder(node *t1)
+{
+    stack s;
+    while (!s.empty() || t1 != NULL)
+    {
+        while (t1 != NULL)
+        {
+            cout << " " << t1->data;
+            s.push(t1);
+            t1 = t1->left;
+        }
+        t1 = s.pop();
+        t1 = t1->right;
+    }
+}
+void expression::non_rec_postorder(node *t1)
+{
+    stack s;
+    int i = 0;
+    char str[30];
+    while (!s.empty() || t1 != NULL)
+    {
+        str[i++] = t1->data;
+        s.push(t1);
+        t1 = t1->right;
+    }
+    t1 = s.pop();
+    t1 = t1->left;
+    while (--i >= 0)
+    {
+        cout << " " << str[i];
+    }
+}
+int main()
+{
+    int ch;
+    char postfix[30];
+    node *root;
+    root = NULL;
+    expression e;
+    do
+    {
+        cout << "\n1.Create Expression tree(from postfix)\n2.Recursive";
+
+        cout << "Traversal\n3.Non recursive Traversal";
+
+        cin >> ch;
+        switch (ch)
+        {
+        case 1:
+            cout << "\nEnter postfix expression";
+            cin >> postfix;
+            // root=e.create_from_post(postfix);
+            root = e.create_from_post(postfix);
+            break;
+        case 2:
+            cout << "\nPreorder Traversal";
+            e.preorder(root);
+            cout << "\nInorder Traversal";
+            e.inorder(root);
+            cout << "\nPostorder Traversal";
+            e.postorder(root);
+            break;
+        case 3:
+            cout << "\n inorder Traversal";
+            e.non_rec_inorder(root);
+            cout << "\n preorder Traversal";
+            e.non_rec_preorder(root);
+            cout << "\nPostorder Traversal";
+            e.non_rec_postorder(root);
+            break;
+        }
+        cout << "\nDo you want to continue?(1/0)";
+        cin >> ch;
+    } while (ch == 1);
+}/******** Circular queue  ***********/
+#include<iostream>
+using namespace std;
+class CQueue
+{
+    int queue[5],front,rear,n;
+    public:
+       CQueue()
+       {
+           n=5;
+           front=-1;
+           rear=-1;
+       }
+       void enqueue(int data);
+       int dequeue();
+       void display();
+};
+void CQueue::enqueue(int data)
+{
+    if(front==-1 && rear==-1)
+    {
+        front=rear=0;
+        queue[rear]=data;
+    }
+    else if(((rear+1)%n)==front)
+    {
+        cout<<"queue is full";
+    }
+    else
+    {
+        rear=(rear+1)%n;
+        queue[rear]=data;
+    }
+}
+int CQueue::dequeue()
+{
+    int data;
+    if(front==-1)
+    {
+        cout<<"Underflow";
+    }    else if(front==rear)
+    {
+        data=queue[front];
+        front=rear=-1;
+    }
+    else
+    {
+        data=queue[front];
+        front=(front+1)%n;
+    }
+    return data;
+}
+void CQueue::display()
+{
+    int i=front;
+    if(front==-1 && rear==-1)
+    {
+        cout<<"\n queue is empty";
+    }
+    else
+    {
+        while(i!=rear)
+        {
+            cout<<queue[i]<<" ";
+            i=(i+1)%n;
+        }
+        cout<<queue[rear];
+    }
+}
+int main()
+{
+    int ch,data;
+    CQueue q=CQueue();
+    do
+    {
+        cout<<"\n 1. Enqueue(insertion)";
+        cout<<"\n 2. Dequue(deletion";
+        cout<<"\n 3. Display";
+        cout<<"\n 4. Exit";
+        cout<<"\n enter your choice: ";
+        cin>>ch;
+        switch(ch)
+        {
+            case 1:
+                    cout<<"\n enter data: ";
+                    cin>>data;
+                    q.enqueue(data);
+                    break;
+            case 2:
+                    data=q.dequeue();
+                    cout<<"\n deleted data is: "<<data;
+                    break;
+            case 3:
+                    q.display();
+                    break;
+        }
+    }while(ch!=4);
+    return 0;
+}
+
+
+
+
+/*****Searching And Sorting******/
+
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+struct Student
+{
+    int rollno;
+    char name[30];
+    float sgpa;
+};
+
+void display(struct Student s[30], int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        cout << "\n"
+             << s[i].rollno << "\t" << s[i].name << "\t" << s[i].sgpa;
+    }
+}
+
+void linear(struct Student s[30], int n)
+{
+    int count = 0;
+    float sa;
+    cout << "\nEnter sgpa to search: ";
+    cin >> sa;
+    for (int i = 0; i < n; i++)
+    {
+        if (s[i].sgpa == sa)
+        {
+            count++;
+            cout << "\n"
+                 << s[i].rollno << "\t" << s[i].name << "\t" << s[i].sgpa;
+        }
+    }
+    cout << "\nTotal records found: " << count;
+}
+
+void bubbleSort(struct Student s[30], int n)
+{
+    int i, j, temp1;
+    float temp2;
+    char temp3[30];
+    for (i = 0; i < n - 1; i++)
+    {
+        for (j = 0; j < n - 1 - i; j++)
+        {
+            if (s[j].rollno > s[j + 1].rollno)
+            {
+                temp1 = s[j].rollno;
+                s[j].rollno = s[j + 1].rollno;
+                s[j + 1].rollno = temp1;
+
+                temp2 = s[j].sgpa;
+                s[j].sgpa = s[j + 1].sgpa;
+                s[j + 1].sgpa = temp2;
+
+                strcpy(temp3, s[j].name);
+                strcpy(s[j].name, s[j + 1].name);
+                strcpy(s[j + 1].name, temp3);
+            }
+        }
+    }
+    display(s, n);
+}
+
+void insertionSort(struct Student s[30], int n)
+{
+    int i, j, temp1;
+    float temp2;
+    char temp3[30];
+    for (i = 1; i < n; i++)
+    {
+        strcpy(temp3, s[i].name);
+        temp1 = s[i].rollno;
+        temp2 = s[i].sgpa;
+        j = i - 1;
+        while (j >= 0 && strcmp(s[j].name, temp3) > 0)
+        {
+            strcpy(s[j + 1].name, s[j].name);
+            s[j + 1].rollno = s[j].rollno;
+            s[j + 1].sgpa = s[j].sgpa;
+            j--;
+        }
+        strcpy(s[j + 1].name, temp3);
+        s[j + 1].rollno = temp1;
+        s[j + 1].sgpa = temp2;
+    }
+    display(s, n);
+}
+
+void binarySearch(struct Student s[30], int n)
+{
+    int left = 0, right = n - 1, mid, flag = 0;
+    char data[30];
+    cout << "\nEnter name to search: ";
+    cin >> data;
+    while (left <= right)
+    {
+        mid = (left + right) / 2;
+        if (strcmp(data, s[mid].name) == 0)
+        {
+            flag = 1;
+            cout << "\nRecord found: ";
+            cout << "\n"
+                 << s[mid].rollno << "\t" << s[mid].name << "\t" << s[mid].sgpa;
+            break;
+        }
+        else if (strcmp(data, s[mid].name) < 0)
+        {
+            right = mid - 1;
+        }
+        else
+        {
+            left = mid + 1;
+        }
+    }
+    if (flag == 0)
+    {
+        cout << "\nRecord not found.";
+    }
+}
+
+int partition(struct Student s[30], int lb, int ub)
+{
+    int start = lb, end = ub, temp2;
+    float pivot = s[lb].sgpa;
+    char temp3[30];
+    while (start < end)
+    {
+        while (s[start].sgpa <= pivot)
+        {
+            start++;
+        }
+        while (s[end].sgpa > pivot)
+        {
+            end--;
+        }
+        if (start < end)
+        {
+            temp2 = s[start].rollno;
+            s[start].rollno = s[end].rollno;
+            s[end].rollno = temp2;
+
+            strcpy(temp3, s[start].name);
+            strcpy(s[start].name, s[end].name);
+            strcpy(s[end].name, temp3);
+
+            float temp1 = s[start].sgpa;
+            s[start].sgpa = s[end].sgpa;
+            s[end].sgpa = temp1;
+        }
+    }
+    float temp1 = s[lb].sgpa;
+    s[lb].sgpa = s[end].sgpa;
+    s[end].sgpa = temp1;
+
+    temp2 = s[lb].rollno;
+    s[lb].rollno = s[end].rollno;
+    s[end].rollno = temp2;
+
+    strcpy(temp3, s[lb].name);
+    strcpy(s[lb].name, s[end].name);
+    strcpy(s[end].name, temp3);
+
+    return end;
+}
+
+void quickSort(struct Student s[30], int lb, int ub)
+{
+    if (lb < ub)
+    {
+        int loc = partition(s, lb, ub);
+        quickSort(s, lb, loc - 1);
+        quickSort(s, loc + 1, ub);
+    }
+}
+
+int main()
+{
+    struct Student s[30];
+    int i, n, choice;
+
+    cout << "Enter number of students: ";
+    cin >> n;
+
+    cout << "\nEnter student information:\n";
+    for (i = 0; i < n; i++)
+    {
+        cout << "\nEnter student rollno, name, sgpa: ";
+        cin >> s[i].rollno >> s[i].name >> s[i].sgpa;
+    }
+
+    do
+    {
+        cout << "\n1. Linear Search (Find students with a specific sgpa)";
+        cout << "\n2. Bubble Sort (Sort students by roll number)";
+        cout << "\n3. Insertion Sort (Sort students alphabetically by name)";
+        cout << "\n4. Binary Search (Search students by name)";
+        cout << "\n5. Quick Sort (Display top 10 toppers)";
+        cout << "\n6. Exit";
+
+        cout << "\nEnter your choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+        case 1:
+            linear(s, n);
+            break;
+        case 2:
+            bubbleSort(s, n);
+            break;
+        case 3:
+            insertionSort(s, n);
+            break;
+        case 4:
+            binarySearch(s, n);
+            break;
+        case 5:
+            quickSort(s, 0, n - 1);
+            display(s, n > 10 ? 10 : n); // Display top 10 or all if less than 10
+            break;
+        }
+    } while (choice != 6);
+
+    return 0;
+}
+
+
+/********Heap Sorting******/
+
+
+#include <iostream>
+using namespace std;
+
+class Heap {
+    int a[50], b[50], n;
+
+public:
+    Heap() {
+        n = -1;
+    }
+
+    void insheap(int);
+    int delheap();
+    void display();
+    void heapsort();
+};
+
+void Heap::insheap(int item) {
+    int i, j;
+    n++;
+    i = n;
+
+    while (i > 0) {
+        j = (i - 1) / 2;
+
+        if (item >= a[j]) {
+            a[i] = item;
+            return;
+        }
+
+        a[i] = a[j];
+        i = j;
+    }
+
+    a[0] = item;
+}
+
+int Heap::delheap() {
+    int left, right, last, i, item;
+    item = a[0];
+    last = a[n];
+    n--;
+    i = 0;
+    left = 1;
+    right = 2;
+
+    while (right <= n) {
+        if (last >= a[left] && last >= a[right]) {
+            a[i] = last;
+            return item;
+        }
+
+        if (a[right] <= a[left]) {
+            a[i] = a[left];
+            i = left;
+        } else {
+            a[i] = a[right];
+            i = right;
+        }
+
+        left = (2 * i) + 1;
+        right = left + 1;
+    }
+
+    if (left == n) {
+        if (last < a[left]) {
+            a[i] = a[left];
+            i = left;
+        }
+    }
+
+    a[i] = last;
+    return item;
+}
+
+void Heap::display() {
+    cout << "\n Elements in heap are:\n";
+    for (int i = 0; i <= n; i++) {
+        cout << " " << a[i];
+    }
+}
+
+void Heap::heapsort() {
+    int item, ch, temp, j = 0;
+    do {
+        cout << "\n Enter item to insert: ";
+        cin >> item;
+        insheap(item);
+        cout << "\n Do you want to insert again? Press 1 for Yes and 0 for NO: ";
+        cin >> ch;
+    } while (ch != 0);
+
+    cout << "\n Before sorting:\n";
+    display();
+
+    temp = n;
+
+    while (n != -1) {
+        b[j] = delheap();
+        j++;
+    }
+
+    cout << "\n After sorting:\n";
+    for (int i = temp; i >= 0; i--) {
+        cout << " " << b[i];
+    }
+}
+
+int main() {
+    Heap h = Heap();
+    h.heapsort();
+    return 0;
+}
+
+
+
+/*****Expression Prefix to postfix(Recursive)(Non Recursive) *******/
+
+#include <iostream>
+using namespace std;
+struct node
+{
+    char data;
+    node *left, *right;
+};
+class stack
+{
+    node *data[30];
+    int top;
+
+public:
+    stack()
+    {
+        top = -1;
+    }
+    int empty()
+    {
+        if (top == -1)
+            return 1;
+        return 0;
+    }
+    void push(node *p)
+    {
+        data[++top] = p;
+    }
+    node *pop()
+    {
+        return (data[top--]);
+    }
+};
+class expression
+{
+public:
+    node *create_from_post(char[]);
+    void inorder(node *t);
+    void preorder(node *t);
+    void postorder(node *t);
+    void non_rec_inorder(node *t1);
+    void non_rec_preorder(node *t1);
+    void non_rec_postorder(node *t1);
+};
+node *expression::create_from_post(char exp[])
+{
+    char c;
+    stack s;
+    node *top, *t1, *t2, *root;
+    int i;
+    for (i = 0; exp[i] != '\0'; i++)
+    {
+        c = exp[i];
+        if (isalnum(c))
+        {
+            top = new node;
+            top->left = NULL;
+            top->right = NULL;
+            top->data = c;
+            s.push(top);
+        }
+        else
+        {
+            t2 = s.pop();
+
+            t1 = s.pop();
+            top = new node;
+            top->data = c;
+            top->left = t1;
+            top->right = t2;
+            s.push(top);
+        }
+    }
+    root = s.pop();
+    return (root);
+}
+void expression::inorder(node *t)
+{
+    if (t != NULL)
+    {
+        inorder(t->left);
+        cout << " " << t->data;
+        inorder(t->right);
+    }
+}
+void expression::preorder(node *t)
+{
+    if (t != NULL)
+    {
+        cout << " " << t->data;
+        preorder(t->left);
+        preorder(t->right);
+    }
+}
+void expression::postorder(node *t)
+{
+    if (t != NULL)
+    {
+        postorder(t->left);
+        postorder(t->right);
+        cout << " " << t->data;
+    }
+}
+void expression::non_rec_inorder(node *t1)
+{
+    stack s;
+    while (!s.empty() || t1 != NULL)
+    {
+        while (t1 != NULL)
+        {
+            s.push(t1);
+            t1 = t1->left;
+        }
+        t1 = s.pop();
+        cout << " " << t1->data;
+        t1 = t1->right;
+    }
+}
+void expression::non_rec_preorder(node *t1)
+{
+    stack s;
+    while (!s.empty() || t1 != NULL)
+    {
+        while (t1 != NULL)
+        {
+            cout << " " << t1->data;
+            s.push(t1);
+            t1 = t1->left;
+        }
+        t1 = s.pop();
+        t1 = t1->right;
+    }
+}
+void expression::non_rec_postorder(node *t1)
+{
+    stack s;
+    int i = 0;
+    char str[30];
+    while (!s.empty() || t1 != NULL)
+    {
+        str[i++] = t1->data;
+        s.push(t1);
+        t1 = t1->right;
+    }
+    t1 = s.pop();
+    t1 = t1->left;
+    while (--i >= 0)
+    {
+        cout << " " << str[i];
+    }
+}
+int main()
+{
+    int ch;
+    char postfix[30];
+    node *root;
+    root = NULL;
+    expression e;
+    do
+    {
+        cout << "\n1.Create Expression tree(from postfix)\n2.Recursive";
+
+        cout << "Traversal\n3.Non recursive Traversal";
+
+        cin >> ch;
+        switch (ch)
+        {
+        case 1:
+            cout << "\nEnter postfix expression";
+            cin >> postfix;
+            // root=e.create_from_post(postfix);
+            root = e.create_from_post(postfix);
+            break;
+        case 2:
+            cout << "\nPreorder Traversal";
+            e.preorder(root);
+            cout << "\nInorder Traversal";
+            e.inorder(root);
+            cout << "\nPostorder Traversal";
+            e.postorder(root);
+            break;
+        case 3:
+            cout << "\n inorder Traversal";
+            e.non_rec_inorder(root);
+            cout << "\n preorder Traversal";
+            e.non_rec_preorder(root);
+            cout << "\nPostorder Traversal";
+            e.non_rec_postorder(root);
+            break;
+        }
+        cout << "\nDo you want to continue?(1/0)";
+        cin >> ch;
+    } while (ch == 1);
+}
