@@ -1,0 +1,47 @@
+// text analytics
+import nltk
+#Stemming
+from nltk.stem import PorterStemmer
+ps = PorterStemmer()
+sample_words = ['Python','pythoning','pythoner','pythonly','pythoned']
+
+for w in NLP_tokens:
+    print(ps.stem(w))
+
+from nltk.corpus import state_union
+from nltk.tokenize import PunktSentenceTokenizer
+train_txt = state_union.raw("2005-GWbush.txt")
+sample_txt = state_union.raw("2006-GWBush.txt")
+
+customsent_tokenizer = PunktSentenceTokenizer(trian_text)
+
+tokenized = customsent_tokenizer.tokenize(sample_txt)
+
+def process_content():
+    try:
+        for i in tokenized:
+            words = nltk.word_tokenize(i)
+            tagged = nltk.pos_tag(words)
+            print(tagged)
+            
+        except Exception as e:
+            print(str(e))
+            
+process_content()
+
+import nltk
+from nltk.stem import WordNetLemmatizer
+wordnet_lemmatizer = WordNetLemmatizer()
+text = "studies studying cries cry"
+tokenization = nltk.word_tokenize(text)
+for w in tokenization:
+    print("lemma for {} is {}".format(w,wordnet_lemmatizer.lemmatize(w)))
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+tfidf = TfidfVectorizer()
+
+df_tfidf = tfidf.fit_transform(df['stemmed_text'])
+df_tfidf = df_tfidf.toarray()
+df_tfidf = pd.DataFrame(df_tfidf,columns=tfidf.get_feature_names_out())
+df_tfidf.head()
