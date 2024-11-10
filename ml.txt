@@ -1,0 +1,176 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+df.drop(["Unnamed: 0", "key"], axis=1, inplace=True)
+df
+df['pickup_datetime'] = pd.to_datetime(df['pickup_datetime'])
+df['pickup_datetime']
+df['pickup_year'] = df['pickup_datetime'].dt.year
+df['pickup_month'] = df['pickup_datetime'].dt.month
+df['pickup_weekday'] = df['pickup_datetime'].dt.weekday
+df['pickup_hour'] = df['pickup_datetime'].dt.hour
+def get_season(arg):
+if arg in [11,12,1,2]:
+return "Winter"
+elif arg in [3,4,5,6]:
+return "Summer"
+else:
+return "Rainy"
+df['pickup_season'] = df['pickup_month'].apply(get_season)
+def get_dayperiod(arg): # hour=1
+if arg > 5 and arg < 12:
+return "Morning"
+elif arg >= 12 and arg < 17:
+return "Afternoon"
+elif arg >= 17 and arg < 22:
+return "Evening"
+else: # 22 -> 5
+return "Night"
+df['pickup_period'] = df['pickup_hour'].apply(get_dayperiod)
+drop_fare_indices = df[df['fare_amount'] <= 0].index
+df.drop(drop_fare_indices, axis=0, inplace=True)
+df.reset_index(inplace=True, drop=True)
+df = df[
+(df['pickup_longitude'] >= -180) & (df['pickup_longitude'] <= 180)
+&
+(df['dropoff_longitude'] >= -180) & (df['dropoff_longitude'] <= 180)
+&
+(df['pickup_latitude'] >= -90) & (df['pickup_latitude'] <= 90)
+&
+(df['dropoff_latitude'] >= -90) & (df['dropoff_latitude'] <= 90)
+]
+drop_count_index = df[df['passenger_count'] > 6].index
+df.drop(drop_count_index, axis=0, inplace=True)
+df.reset_index(inplace=True, drop=True)
+df[df['passenger_count'] <= 0]
+drop_count_index = df[df['passenger_count'] <= 0].index
+df.drop(drop_count_index, axis=0, inplace=True)
+df.reset_index(inplace=True, drop=True)
+def haversine_distance(lon_1, lon_2, lat_1, lat_2):
+lon_1,lon_2, lat_1, lat_2 = map(np.radians,[lon_1,lon_2,lat_1,lat_2])
+diff_lon = lon_2 - lon_1
+diff_lat = lat_2 - lat_1
+km = 2 * 6371 * np.arcsin(np.sqrt(np.sin(diff_lat/2.0)**2 + np.cos(lat_1) *␣
+np.cos(lat_2) * np.sin(diff_lon / 2.0) ** 2))
+return km
+df['distance'] =␣
+↪haversine_distance(df['pickup_longitude'],df['dropoff_longitude'],␣
+↪df['pickup_latitude'],df['dropoff_latitude'])
+
+
+// ml 4
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.metrics import accuracy_score, confusion_matrix
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout
+
+# Step 1: Load the dataset
+url = "https://www.kaggle.com/barelydedicated/bank-customer-churn-modeling/download"
+data = pd.read_csv("Churn_Modelling.csv")
+
+# Step 2: Separate features (X) and target variable (y)
+X = data.drop(['CustomerId', 'Surname', 'Exited'], axis=1)  # Drop irrelevant columns and target column
+y = data['Exited']  # Target column
+
+# Convert categorical columns to numerical (encoding Geography and Gender)
+le_geo = LabelEncoder()
+le_gender = LabelEncoder()
+X['Geography'] = le_geo.fit_transform(X['Geography'])
+X['Gender'] = le_gender.fit_transform(X['Gender'])
+
+# Step 3: Split into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+# Normalize the data using StandardScaler
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Step 4: Define and build the neural network model
+model = Sequential([
+    Dense(16, input_shape=(X_train.shape[1],), activation='relu'),
+    Dropout(0.3),  # Regularization to avoid overfitting
+    Dense(16, activation='relu'),
+    Dropout(0.3),
+    Dense(1, activation='sigmoid')  # Output layer for binary classification
+])
+
+# Compile the model
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+# Train the model
+history = model.fit(X_train, y_train, epochs=50, batch_size=32, validation_split=0.2, verbose=1)
+
+# Step 5: Evaluate the model
+y_pred = (model.predict(X_test) > 0.5).astype(int)  # Convert probabilities to binary predictions
+
+# Print accuracy score
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+
+# Print confusion matrix
+conf_matrix = confusion_matrix(y_test, y_pred)
+print("Confusion Matrix:\n", conf_matrix)
+
+// ml 5
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.metrics import accuracy_score, confusion_matrix
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout
+
+# Step 1: Load the dataset
+url = "https://www.kaggle.com/barelydedicated/bank-customer-churn-modeling/download"
+data = pd.read_csv("Churn_Modelling.csv")
+
+# Step 2: Separate features (X) and target variable (y)
+X = data.drop(['CustomerId', 'Surname', 'Exited'], axis=1)  # Drop irrelevant columns and target column
+y = data['Exited']  # Target column
+
+# Convert categorical columns to numerical (encoding Geography and Gender)
+le_geo = LabelEncoder()
+le_gender = LabelEncoder()
+X['Geography'] = le_geo.fit_transform(X['Geography'])
+X['Gender'] = le_gender.fit_transform(X['Gender'])
+
+# Step 3: Split into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+# Normalize the data using StandardScaler
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Step 4: Define and build the neural network model
+model = Sequential([
+    Dense(16, input_shape=(X_train.shape[1],), activation='relu'),
+    Dropout(0.3),  # Regularization to avoid overfitting
+    Dense(16, activation='relu'),
+    Dropout(0.3),
+    Dense(1, activation='sigmoid')  # Output layer for binary classification
+])
+
+# Compile the model
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+# Train the model
+history = model.fit(X_train, y_train, epochs=50, batch_size=32, validation_split=0.2, verbose=1)
+
+# Step 5: Evaluate the model
+y_pred = (model.predict(X_test) > 0.5).astype(int)  # Convert probabilities to binary predictions
+
+# Print accuracy score
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+
+# Print confusion matrix
+conf_matrix = confusion_matrix(y_test, y_pred)
+print("Confusion Matrix:\n", conf_matrix)
