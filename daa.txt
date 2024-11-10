@@ -1,0 +1,270 @@
+// daa 1
+public class FibonacciCalculator {
+
+    // Recursive method to calculate Fibonacci numbers
+    public static int fibonacciRecursive(int n) {
+        if (n <= 1) {
+            return n;
+        }
+        return fibonacciRecursive(n - 1) + fibonacciRecursive(n - 2);
+    }
+
+    // Non-recursive (iterative) method to calculate Fibonacci numbers
+    public static int fibonacciIterative(int n) {
+        if (n <= 1) {
+            return n;
+        }
+        
+        int a = 0, b = 1, fib = 1;
+        for (int i = 2; i <= n; i++) {
+            fib = a + b;
+            a = b;
+            b = fib;
+        }
+        return fib;
+    }
+
+    public static void main(String[] args) {
+        int n = 10; // Example input, can be changed
+
+        // Testing recursive method
+        System.out.println("Recursive Fibonacci of " + n + ": " + fibonacciRecursive(n));
+
+        // Testing non-recursive (iterative) method
+        System.out.println("Iterative Fibonacci of " + n + ": " + fibonacciIterative(n));
+    }
+}
+
+
+// daa 3
+import java.util.Arrays;
+import java.util.Comparator;
+
+class Item {
+    int value, weight;
+
+    // Constructor
+    public Item(int value, int weight) {
+        this.value = value;
+        this.weight = weight;
+    }
+}
+
+public class FractionalKnapsack {
+
+    // Function to get the maximum total value in the knapsack
+    public static double getMaxValue(int capacity, Item[] items) {
+        // Sort items by value-to-weight ratio in descending order
+        Arrays.sort(items, new Comparator<Item>() {
+            @Override
+            public int compare(Item o1, Item o2) {
+                double r1 = (double) o1.value / o1.weight;
+                double r2 = (double) o2.value / o2.weight;
+                return Double.compare(r2, r1); // Descending order
+            }
+        });
+
+        double totalValue = 0.0;
+
+        for (Item item : items) {
+            if (capacity == 0) break; // Knapsack is full
+
+            if (item.weight <= capacity) {
+                // Take the whole item
+                capacity -= item.weight;
+                totalValue += item.value;
+            } else {
+                // Take a fraction of the item
+                totalValue += item.value * ((double) capacity / item.weight);
+                capacity = 0; // Knapsack is now full
+            }
+        }
+
+        return totalValue;
+    }
+
+    public static void main(String[] args) {
+        // Define items with their values and weights
+        Item[] items = {
+            new Item(60, 10),
+            new Item(100, 20),
+            new Item(120, 30)
+        };
+        
+        int capacity = 50; // Capacity of the knapsack
+
+        double maxValue = getMaxValue(capacity, items);
+        System.out.println("Maximum value we can obtain = " + maxValue);
+    }
+}
+
+
+//daa 4
+public class Knapsack {
+
+    // Function to solve 0-1 Knapsack problem using Dynamic Programming
+    public static int knapsackDP(int capacity, int[] weights, int[] values, int n) {
+        int[][] dp = new int[n + 1][capacity + 1];
+
+        // Building the DP table in a bottom-up manner
+        for (int i = 0; i <= n; i++) {
+            for (int w = 0; w <= capacity; w++) {
+                if (i == 0 || w == 0) {
+                    dp[i][w] = 0; // Base case: no items or no capacity
+                } else if (weights[i - 1] <= w) {
+                    // Include the item or exclude it, and take the maximum value
+                    dp[i][w] = Math.max(values[i - 1] + dp[i - 1][w - weights[i - 1]], dp[i - 1][w]);
+                } else {
+                    dp[i][w] = dp[i - 1][w]; // Exclude the item
+                }
+            }
+        }
+
+        // The last cell of the DP table will contain the maximum value
+        return dp[n][capacity];
+    }
+
+    public static void main(String[] args) {
+        int[] values = {60, 100, 120}; // Item values
+        int[] weights = {10, 20, 30}; // Item weights
+        int capacity = 50; // Knapsack capacity
+        int n = values.length;
+
+        int maxValue = knapsackDP(capacity, weights, values, n);
+        System.out.println("Maximum value in Knapsack = " + maxValue);
+    }
+}
+
+// daa 5
+public class NQueens {
+    static int n = 4; // Change to your desired board size
+    static int[][] board = new int[n][n];
+    
+    public static void main(String[] args) {
+        board[0][0] = 1; // Place the first queen at (0, 0)
+        if (placeQueens(1)) {
+            printBoard();
+        } else {
+            System.out.println("Solution not possible.");
+        }
+    }
+
+    static boolean placeQueens(int row) {
+        if (row == n) return true; // All queens placed
+        
+        for (int col = 0; col < n; col++) {
+            if (isSafe(row, col)) {
+                board[row][col] = 1; // Place queen
+                if (placeQueens(row + 1)) return true; // Recursively place the rest
+                board[row][col] = 0; // Backtrack
+            }
+        }
+        return false;
+    }
+
+    static boolean isSafe(int row, int col) {
+        for (int i = 0; i < row; i++) // Check column
+            if (board[i][col] == 1) return false;
+        
+        for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) // Check left diagonal
+            if (board[i][j] == 1) return false;
+        
+        for (int i = row - 1, j = col + 1; i >= 0 && j < n; i--, j++) // Check right diagonal
+            if (board[i][j] == 1) return false;
+
+        return true;
+    }
+
+    static void printBoard() {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}
+
+//daa 2
+import java.util.PriorityQueue;
+import java.util.HashMap;
+import java.util.Map;
+
+class HuffmanNode {
+    char ch;
+    int freq;
+    HuffmanNode left;
+    HuffmanNode right;
+
+    // Constructor
+    public HuffmanNode(char ch, int freq) {
+        this.ch = ch;
+        this.freq = freq;
+    }
+}
+
+class HuffmanEncoding {
+    // Generate Huffman codes
+    public static Map<Character, String> generateHuffmanCodes(Map<Character, Integer> freqMap) {
+        PriorityQueue<HuffmanNode> pq = new PriorityQueue<>((a, b) -> a.freq - b.freq);
+
+        // Step 1: Create a node for each character and add it to the priority queue
+        for (Map.Entry<Character, Integer> entry : freqMap.entrySet()) {
+            pq.add(new HuffmanNode(entry.getKey(), entry.getValue()));
+        }
+
+        // Step 2: Build the Huffman Tree
+        while (pq.size() > 1) {
+            HuffmanNode left = pq.poll();
+            HuffmanNode right = pq.poll();
+
+            // Create a new internal node with frequency equal to the sum of the two nodes
+            HuffmanNode internal = new HuffmanNode('-', left.freq + right.freq);
+            internal.left = left;
+            internal.right = right;
+
+            pq.add(internal);
+        }
+
+        // Step 3: Traverse the tree and generate codes
+        Map<Character, String> huffmanCodes = new HashMap<>();
+        generateCodes(pq.poll(), "", huffmanCodes);
+        return huffmanCodes;
+    }
+
+    // Helper method to generate codes recursively
+    private static void generateCodes(HuffmanNode node, String code, Map<Character, String> huffmanCodes) {
+        if (node == null) return;
+
+        // Leaf node, store the code
+        if (node.left == null && node.right == null) {
+            huffmanCodes.put(node.ch, code);
+        }
+
+        // Traverse left and right with '0' and '1'
+        generateCodes(node.left, code + "0", huffmanCodes);
+        generateCodes(node.right, code + "1", huffmanCodes);
+    }
+
+    // Print Huffman codes
+    public static void printHuffmanCodes(Map<Character, String> huffmanCodes) {
+        for (Map.Entry<Character, String> entry : huffmanCodes.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
+    }
+
+    public static void main(String[] args) {
+        // Sample input: character frequencies
+        Map<Character, Integer> freqMap = new HashMap<>();
+        freqMap.put('a', 5);
+        freqMap.put('b', 9);
+        freqMap.put('c', 12);
+        freqMap.put('d', 13);
+        freqMap.put('e', 16);
+        freqMap.put('f', 45);
+
+        Map<Character, String> huffmanCodes = generateHuffmanCodes(freqMap);
+        System.out.println("Huffman Codes for each character:");
+        printHuffmanCodes(huffmanCodes);
+    }
+}
