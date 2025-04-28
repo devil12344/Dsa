@@ -225,7 +225,7 @@ void merge(int arr[], int l, int m, int r){
     while(i<n1){
         arr[k++] = L[i++];
     }
-    while(i<n1){
+    while(j<n2){
         arr[k++] = R[j++];
     }
 
@@ -246,12 +246,12 @@ void parallelMergeSort(int l, int r){
         {
             m = (l+r)/2;
             #pragma omp section
-            sequentialMergeSort(l, m);
+            parallelMergeSort(l, m);
 
             #pragma omp section
-            sequentialMergeSort(m+1, r);
+            parallelMergeSort(m+1, r);
         }
-        merge(arr1_m, l, m, r);
+        merge(arr2_m, l, m, r);
     }
 }
 
@@ -305,86 +305,65 @@ int main(){
 // Min max Reduction
 
 
-#include <iostream>
-#include <vector>
-#include <omp.h>
-#include <climits>
-
+#include<iostream>
+#include<omp.h>
 using namespace std;
 
-void min_reduction(vector<int>& arr) {
-    int min_value = INT_MAX;
-    #pragma omp parallel for reduction(min: min_value)
-    for (int i = 0; i < arr.size(); i++) {
-        if (arr[i] < min_value) {
-            min_value = arr[i];
-        }
-    }
-    cout << "Minimum value: " << min_value << endl;
-}
+# define MAX 500000
+int main(){
+    int arr[MAX];
+    double start, end;
 
-void max_reduction(vector<int>& arr) {
-    int max_value = INT_MIN;
-    #pragma omp parallel for reduction(max: max_value)
-    for (int i = 0; i < arr.size(); i++) {
-        if (arr[i] > max_value) {
-            max_value = arr[i];
-        }
-    }
-    cout << "Maximum value: " << max_value << endl;
-}
-
-void sum_reduction(vector<int>& arr) {
-    int sum = 0;
-    #pragma omp parallel for reduction(+: sum)
-    for (int i = 0; i < arr.size(); i++) {
-        sum += arr[i];
-    }
-    cout << "Sum: " << sum << endl;
-}
-
-void average_reduction(vector<int>& arr) {
-    int sum = 0;
-    #pragma omp parallel for reduction(+: sum)
-    for (int i = 0; i < arr.size(); i++) {
-        sum += arr[i];
-    }
-    cout << "Average: " << (double)sum / arr.size() << endl;
-}
-
-int main() {
-    vector<int> arr;
-    int n, val;
-
-    cout << "Enter number of elements: ";
-    cin >> n;
-
-    cout << "Enter " << n << " elements:\n";
-    for (int i = 0; i < n; ++i) {
-        cin >> val;
-        arr.push_back(val);
+    for(int i=0;i<MAX;i++){
+        arr[i]=rand()%1001;
     }
 
-    min_reduction(arr);
-    max_reduction(arr);
-    sum_reduction(arr);
-    average_reduction(arr);
+    // for(int i=0;i<MAX;i++){
+    //     cout<<arr[i]<<" ";
+    // }
 
-    return 0;
+    int sum=0;
+    int minVal = arr[0];
+    int maxVal = arr[0];
+    int avg;
+
+    // Sequential execution
+    start = omp_get_wtime();
+    for(int i=0; i<MAX; i++){
+        sum +=arr[i];
+        if(minVal>arr[i]){ minVal=arr[i];}
+        if(maxVal<arr[i]){ maxVal=arr[i];}
+    }
+    end = omp_get_wtime();
+    avg = sum/MAX;
+    cout<<"\n--- Using Sequential Reduction ---";
+    cout<<"\n> SUM    : "<<sum;
+    cout<<"\n> MinVal : "<<minVal;
+    cout<<"\n> MaxVal : "<<maxVal;
+    cout<<"\n> Avg    : "<<avg;
+    cout<<"\n> Time by sequential reduction = "<<(end-start)<<" ms.";
+    
+    sum=0;
+    minVal = arr[0];
+    maxVal = arr[0];
+
+    start = omp_get_wtime();
+    #pragma omp parallel for reduction(+:sum) reduction(min:minVal) reduction(max:maxVal)
+    for(int i=0; i<MAX; i++){
+        sum +=arr[i];
+        if(minVal>arr[i]){ minVal=arr[i];}
+        if(maxVal<arr[i]){ maxVal=arr[i];}
+    }
+    end = omp_get_wtime();
+    avg = sum/MAX;
+    cout<<"\n--- Using Parallel Reduction ---";
+    cout<<"\n> SUM    : "<<sum;
+    cout<<"\n> MinVal : "<<minVal;
+    cout<<"\n> MaxVal : "<<maxVal;
+    cout<<"\n> Avg    : "<<avg;
+    cout<<"\n> Time by parallel reduction = "<<(end-start)<<" ms.";
+
+
 }
-
-
-
-// Output
-
-user:~/Downloads/A/A$ g++ -fopenmp red.cpp -o red
-user:~/Downloads/A/A$ ./red
-Enter number of elements: 5
-Enter 5 elements:
-10 25 7 8 12
-Minimum value: 7
-Maximum value: 25
-Sum: 62
-Average: 12.4
 
 
