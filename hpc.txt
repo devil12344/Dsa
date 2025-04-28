@@ -1,0 +1,390 @@
+// bfs dfs
+
+#include<iostream>
+#include<omp.h>
+using namespace std;
+
+#define MAX 100
+
+int graph[MAX][MAX];
+int visited[MAX];
+int queue[MAX];
+int stack[MAX];
+int front=0, rear=-1;
+int top=-1;
+int V;
+
+void createGraph(){
+    int ch;
+
+    cout<<"Enter total vertices = ";
+    cin>>V;
+
+    for(int i=0; i<V;i++){
+        for(int j=i+1; j<V;j++){
+            graph[i][j]=0;
+        }
+    }
+
+    for(int i=0; i<V;i++){
+        for(int j=i+1; j<V;j++){
+            cout<<"\n> Is edge between "<<i<<" "<<j<<" (yes:1) = ";
+            cin>>ch;
+            if(ch==1){
+                graph[i][j]=graph[j][i]=1;
+            }
+            else{
+                graph[i][j]=graph[j][i]=0;
+            }
+        }
+    }
+
+    cout<<"\n\nAdjancecy Matrix \n";
+    for(int i=0; i<V;i++){
+        for(int j=0; j<V;j++){
+            cout<<graph[i][j]<<" ";
+        }
+        cout<<"\n";
+    }
+}
+
+// Queue operations 
+void enqueue(int ver){
+    queue[++rear] = ver;
+}
+int dequeue(){
+    int ver = queue[front];
+    front++;
+    return ver;
+}
+bool isQueueEmpty(){
+    if(front > rear){
+        return true;
+    }
+    return false;
+}
+
+// Stack operations
+void push(int ver){
+    stack[++top]=ver;
+}
+int pop(){
+    int val = stack[top--];
+    return val;
+}
+bool isStackEmpty(){
+    if(top==-1){
+        return true;
+    }
+    return false;
+}
+
+void parallelBFS(int start){
+    int current;
+
+    for(int i=0; i<V; i++){
+        visited[i]=0;
+    }
+
+    visited[start] = 1;
+    enqueue(start);
+
+    while(!isQueueEmpty()){
+        current = dequeue();
+        cout<<current<<" ";
+        
+        #pragma omp parallel for
+        for(int i=0; i<V; i++){
+            if(graph[current][i]==1 && visited[i]!=1){
+                #pragma omp critical
+                {
+                    enqueue(i);
+                    visited[i]=1;
+                }
+            }
+        }
+
+    } 
+}
+
+void parallelDFS(int start){
+    int current;
+
+    for(int i=0; i<V; i++){
+        visited[i]=0;
+    }
+
+    visited[start] = 1;
+    push(start);
+
+    while(!isStackEmpty()){
+        current = pop();
+        cout<<current<<" ";
+
+        #pragma omp parallel for
+        for(int i=0; i<V; i++){
+            if(graph[current][i]==1 && visited[i]!=1){
+                #pragma omp critical
+                {
+                    push(i);
+                    visited[i]=1;
+                }
+            }
+        }
+
+    } 
+}
+
+int main(){
+    double start, end;
+    createGraph();
+    
+    cout<<"BFS \n\n";
+    start = omp_get_wtime();
+    parallelBFS(0);
+    end = omp_get_wtime();
+    cout<<"\n > Time "<<(end-start)*1000<<" ms";
+
+    cout<<"DFS \n\n";
+    start = omp_get_wtime();
+    parallelDFS(0);
+    end = omp_get_wtime();
+    cout<<"\n > Time "<<(end-start)*1000<<" ms";
+}
+
+// Merge and bubble sort
+#include<iostream>
+#include<omp.h>
+using namespace std;
+
+#define MAX 100000
+
+int arr1_b[MAX];
+int arr2_b[MAX];
+int arr1_m[MAX];
+int arr2_m[MAX];
+
+void createArray(){
+    int a;
+    for(int i=0; i<MAX;i++){
+        a = rand() % 101;  // 0 to 100
+        arr1_b[i] = arr2_b[i] = arr1_m[i] = arr2_m[i] = a;
+    }
+}
+
+void sequentialBubbleSort(){
+    for(int i=MAX; i>0; i--){
+        for(int j=0;j<i-1;j++){
+            if(arr1_b[j] > arr1_b[j+1]){
+                swap(arr1_b[j], arr1_b[j+1]);
+            }
+        }
+    }
+}
+void parallelBubbleSort(){
+    for(int i=0; i<MAX; i++){
+        
+        #pragma omp parallel for
+        for(int j=0; j<MAX-1; j+=2){
+            if(arr2_b[j] > arr2_b[j+1]){
+                swap(arr2_b[j], arr2_b[j+1]);
+            }
+        }
+        
+        #pragma omp parallel for
+        for(int j=1; j<MAX-1; j+=2){
+            if(arr2_b[j] > arr2_b[j+1]){
+                swap(arr2_b[j], arr2_b[j+1]);
+            }
+        }
+    }
+}
+
+void merge(int arr[], int l, int m, int r){
+    int n1 = m-l+1;
+    int n2 = r-m;
+    int L[n1], R[n2];
+
+    for(int i=0;i<n1;i++){
+        L[i] = arr[i+l];
+    }
+    for(int i=0;i<n2;i++){
+        R[i] = arr[i+m+1];
+    }
+
+    int i=0, j=0, k=l;
+
+    while(i<n1 && j<n2){
+        if(L[i]>R[j]){
+            arr[k++] = L[i++];
+        }
+        else{
+            arr[k++] = R[j++];
+        }
+    }
+    while(i<n1){
+        arr[k++] = L[i++];
+    }
+    while(i<n1){
+        arr[k++] = R[j++];
+    }
+
+}
+void sequentialMergeSort(int l, int r){
+    int m;
+    if(l<r){
+        m = (l+r)/2;
+        sequentialMergeSort(l, m);
+        sequentialMergeSort(m+1, r);
+        merge(arr1_m, l, m, r);
+    }
+}
+void parallelMergeSort(int l, int r){
+    int m;
+    if(l<r){
+        #pragma omp parallel sections
+        {
+            m = (l+r)/2;
+            #pragma omp section
+            sequentialMergeSort(l, m);
+
+            #pragma omp section
+            sequentialMergeSort(m+1, r);
+        }
+        merge(arr1_m, l, m, r);
+    }
+}
+
+
+int main(){
+    double start, end;
+
+    createArray();
+    // for(int i=0; i<MAX;i++){
+    //     cout<<arr1_b[i]<<" ";
+    // }
+    
+    cout<<"\n------------------------------------------------------------------\n";
+    start =  omp_get_wtime();
+    sequentialBubbleSort();
+    end =  omp_get_wtime();
+    // for(int i=0; i<MAX;i++){
+    //     cout<<arr1_b[i]<<" ";
+    // }
+    cout<<"\nTime Sequential Bubble Sort = "<<(end-start)*1000<<" ms.";
+
+    cout<<"\n------------------------------------------------------------------\n";
+    start =  omp_get_wtime();
+    parallelBubbleSort();
+    end =  omp_get_wtime();
+    // for(int i=0; i<MAX;i++){
+    //     cout<<arr1_b[i]<<" ";
+    // }
+    cout<<"\nTime Parallel Bubble Sort = "<<(end-start)*1000<<" ms.\n";
+
+    cout<<"\n------------------------------------------------------------------\n";
+    start =  omp_get_wtime();
+    sequentialMergeSort(0,MAX-1);
+    end =  omp_get_wtime();
+    // for(int i=0; i<MAX;i++){
+    //     cout<<arr1_b[i]<<" ";
+    // }
+    cout<<"\nTime Sequential Merge Sort = "<<(end-start)*1000<<" ms.";
+
+    cout<<"\n------------------------------------------------------------------\n";
+    start =  omp_get_wtime();
+    parallelMergeSort(0,MAX-1);
+    end =  omp_get_wtime();
+    // for(int i=0; i<MAX;i++){
+    //     cout<<arr1_b[i]<<" ";
+    // }
+    cout<<"\nTime Parallel Merge Sort = "<<(end-start)*1000<<" ms.";
+
+}
+
+// Min max Reduction
+
+
+#include <iostream>
+#include <vector>
+#include <omp.h>
+#include <climits>
+
+using namespace std;
+
+void min_reduction(vector<int>& arr) {
+    int min_value = INT_MAX;
+    #pragma omp parallel for reduction(min: min_value)
+    for (int i = 0; i < arr.size(); i++) {
+        if (arr[i] < min_value) {
+            min_value = arr[i];
+        }
+    }
+    cout << "Minimum value: " << min_value << endl;
+}
+
+void max_reduction(vector<int>& arr) {
+    int max_value = INT_MIN;
+    #pragma omp parallel for reduction(max: max_value)
+    for (int i = 0; i < arr.size(); i++) {
+        if (arr[i] > max_value) {
+            max_value = arr[i];
+        }
+    }
+    cout << "Maximum value: " << max_value << endl;
+}
+
+void sum_reduction(vector<int>& arr) {
+    int sum = 0;
+    #pragma omp parallel for reduction(+: sum)
+    for (int i = 0; i < arr.size(); i++) {
+        sum += arr[i];
+    }
+    cout << "Sum: " << sum << endl;
+}
+
+void average_reduction(vector<int>& arr) {
+    int sum = 0;
+    #pragma omp parallel for reduction(+: sum)
+    for (int i = 0; i < arr.size(); i++) {
+        sum += arr[i];
+    }
+    cout << "Average: " << (double)sum / arr.size() << endl;
+}
+
+int main() {
+    vector<int> arr;
+    int n, val;
+
+    cout << "Enter number of elements: ";
+    cin >> n;
+
+    cout << "Enter " << n << " elements:\n";
+    for (int i = 0; i < n; ++i) {
+        cin >> val;
+        arr.push_back(val);
+    }
+
+    min_reduction(arr);
+    max_reduction(arr);
+    sum_reduction(arr);
+    average_reduction(arr);
+
+    return 0;
+}
+
+
+
+// Output
+
+user:~/Downloads/A/A$ g++ -fopenmp red.cpp -o red
+user:~/Downloads/A/A$ ./red
+Enter number of elements: 5
+Enter 5 elements:
+10 25 7 8 12
+Minimum value: 7
+Maximum value: 25
+Sum: 62
+Average: 12.4
+
+
